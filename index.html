@@ -9,36 +9,45 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#111;--bg2:#181818;--bg3:#1e1e1e;
-  --bdr:rgba(255,255,255,.09);--bdr2:rgba(255,255,255,.05);
-  --white:#f0ece4;--muted:#888;--muted2:#555;
+  --bdr:rgba(255,255,255,.14);--bdr2:rgba(255,255,255,.08);
+  --white:#f0ece4;
+  /* Greys aclarados para mejor lectura sobre negro */
+  --muted:#b8b3a8;       /* antes #888 — texto secundario */
+  --muted2:#8a8478;      /* antes #555 — texto terciario */
   --gold:#d4a843;--green:#3dba7c;--r:8px;--r2:12px;
 }
 body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:14px;}
 
 /* ── HEADER ─────────────────────────────────── */
 .hdr{padding:2rem 2.5rem 1.5rem;max-width:1360px;margin:0 auto;}
-.eu-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bdr);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;margin-bottom:1rem;}
+.eu-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bdr);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;margin-bottom:1rem;color:var(--white);}
 .eu-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2.2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .hdr h1{font-size:1.85rem;font-weight:700;letter-spacing:-.025em;margin-bottom:.35rem;}
 .hdr .sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
 
-/* ── PLATFORM PILLS ─────────────────────────── */
-.platforms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.4rem;}
-.ptag{font-size:11px;padding:4px 13px;border:1px solid var(--bdr);border-radius:20px;color:var(--muted);cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;}
-.ptag:hover,.ptag.on{border-color:rgba(255,255,255,.3);color:var(--white);background:rgba(255,255,255,.06);}
+/* ── FILTER GROUP LABEL ─────────────────────── */
+.filter-label{font-size:10.5px;font-weight:600;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:.55rem;}
 
-/* ── TOPIC BUTTONS ──────────────────────────── */
-.topics{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
-.tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;}
-.tbtn:hover{border-color:rgba(255,255,255,.22);background:var(--bg3);}
+/* ── PLATFORM PILLS (entidad) ────────────────── */
+.platforms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.4rem;}
+.ptag{font-size:11px;padding:5px 13px;border:1px solid var(--bdr);border-radius:20px;color:var(--white);cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;font-weight:500;}
+.ptag:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);}
+.ptag.on{border-color:var(--white);background:rgba(255,255,255,.12);color:var(--white);}
+
+/* ── TYPE BUTTONS (Open Call / Licitación / Beca) ── */
+.types{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
+.tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:7px;}
+.tbtn:hover{border-color:rgba(255,255,255,.32);background:var(--bg3);}
 .tbtn.on{background:var(--white);color:var(--bg);border-color:var(--white);}
+.tbtn .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.55;}
+.tbtn.on .dot{opacity:1;}
 
 /* ── STATUS BAR ─────────────────────────────── */
 .statusbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;padding:0 2.5rem .9rem;max-width:1360px;margin:0 auto;}
 .status-l{display:flex;align-items:center;gap:.75rem;font-size:12px;color:var(--muted);flex-wrap:wrap;}
 .udot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
-.countdown{font-size:11px;color:var(--muted2);}
+.countdown{font-size:11px;color:var(--muted);}
 
 /* ── REFRESH BUTTON ─────────────────────────── */
 .btn-refresh{
@@ -47,18 +56,18 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:
   border:1px solid var(--bdr);
   border-radius:20px;
   background:transparent;
-  color:var(--muted);
+  color:var(--white);
   font-size:11px;font-weight:500;
   cursor:pointer;
   font-family:inherit;
   transition:all .15s;
   flex-shrink:0;
 }
-.btn-refresh:hover{border-color:rgba(255,255,255,.3);color:var(--white);background:rgba(255,255,255,.06);}
-.btn-refresh:disabled{opacity:.4;cursor:not-allowed;}
+.btn-refresh:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);}
+.btn-refresh:disabled{opacity:.45;cursor:not-allowed;}
 .btn-refresh .ico{display:inline-block;transition:transform .5s;}
-.btn-refresh.spinning .ico{animation:spin-once .6s linear;}
-@keyframes spin-once{to{transform:rotate(360deg);}}
+.btn-refresh.spinning .ico{animation:spin-cont 1s linear infinite;}
+@keyframes spin-cont{to{transform:rotate(360deg);}}
 
 /* ── SEARCH BOX ─────────────────────────────── */
 .status-r{display:flex;align-items:center;gap:8px;}
@@ -94,7 +103,7 @@ thead th{
 .th-sort.desc .arrow::after{content:'↓';}
 .th-sort .arrow{
   font-size:12px;color:var(--gold);
-  opacity:0;transition:opacity .15s;
+  opacity:.4;transition:opacity .15s;
 }
 .th-sort.asc  .arrow,
 .th-sort.desc .arrow{opacity:1;}
@@ -106,19 +115,19 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 
 /* COL 1 — Convocatoria */
 .td-title{font-weight:500;color:var(--white);margin-bottom:5px;line-height:1.4;}
-.td-country{font-size:11px;color:var(--muted);margin-top:3px;}
-.td-deadline{font-size:11px;color:var(--muted);margin-top:3px;}
+.td-country{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.td-deadline{font-size:11.5px;color:var(--muted);margin-top:3px;}
 .topic-tag{display:inline-block;font-size:9px;padding:1px 7px;border-radius:20px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle;position:relative;top:-1px;}
 .b-mobility{background:#0e3d28;color:#52d68a;}
 .b-transport{background:#0d2e4a;color:#5aaff0;}
 .b-training{background:#3d2a0a;color:#e0a84a;}
-.b-infrastr{background:#2a2a2a;color:#aaa;}
+.b-infrastr{background:#2a2a2a;color:#bdbdbd;}
 .b-smart{background:#1a2e3a;color:#4ac8d4;}
 .b-green{background:#0e3020;color:#40d4a0;}
-.b-other{background:#222;color:#888;}
+.b-other{background:#2a2a2a;color:#aaa;}
 
 /* COL 2 — Fecha */
-.td-date{color:var(--muted);font-size:12px;white-space:nowrap;}
+.td-date{color:var(--white);font-size:12px;white-space:nowrap;}
 
 /* COL 3 — Entidad + tipo */
 .td-entity{color:var(--white);font-size:12px;margin-bottom:5px;}
@@ -128,25 +137,25 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 .tp-concurso{background:#3d2a0a;color:#e0a84a;}
 .tp-beca{background:#2a1a3d;color:#c084fc;}
 .tp-formacion{background:#3d2a0a;color:#e0a84a;}
-.tp-other{background:#222;color:#888;}
+.tp-other{background:#2a2a2a;color:#bdbdbd;}
 
 /* COL 4 — Valor */
 .td-budget{color:var(--gold);font-size:12px;font-weight:500;}
-.td-budget.empty{color:var(--muted2);}
+.td-budget.empty{color:var(--muted);}
 
 /* COL 5 — Link */
 .td-link{text-align:center;}
-.link-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--gold);text-decoration:none;padding:5px 12px;border:1px solid rgba(212,168,67,.3);border-radius:20px;transition:all .15s;white-space:nowrap;}
-.link-btn:hover{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.6);}
+.link-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--gold);text-decoration:none;padding:5px 12px;border:1px solid rgba(212,168,67,.4);border-radius:20px;transition:all .15s;white-space:nowrap;}
+.link-btn:hover{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.7);}
 
 /* ── EMPTY ──────────────────────────────────── */
 .empty{padding:4rem 2rem;text-align:center;color:var(--muted);border:1px dashed var(--bdr);border-radius:var(--r2);}
-.empty-icon{font-size:2rem;margin-bottom:.75rem;opacity:.35;}
-.empty h3{font-size:.95rem;color:var(--muted);margin-bottom:.35rem;}
-.empty p{font-size:12px;}
+.empty-icon{font-size:2rem;margin-bottom:.75rem;opacity:.5;}
+.empty h3{font-size:.95rem;color:var(--white);margin-bottom:.35rem;}
+.empty p{font-size:12px;color:var(--muted);}
 
 /* ── LOADING TOAST ──────────────────────────── */
-.loader{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;}
+.loader{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--white);box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;}
 .loader.show{opacity:1;}
 .spin{width:12px;height:12px;border:1.5px solid var(--bdr);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -169,6 +178,8 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
   <h1>Radar de Licitaciones Europeas</h1>
   <p class="sub">Movilidad · Transporte · Formación · Open Calls</p>
 
+  <!-- Filtro 1: por entidad/plataforma -->
+  <div class="filter-label">Filtrar por entidad</div>
   <div class="platforms" id="platforms">
     <button class="ptag on" data-p="all">Todas las plataformas</button>
     <button class="ptag" data-p="TED / SIMAP">TED / SIMAP</button>
@@ -181,14 +192,13 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
     <button class="ptag" data-p="CEF Transport">CEF Transport</button>
   </div>
 
-  <div class="topics" id="topics">
-    <button class="tbtn on" data-t="all">Todas</button>
-    <button class="tbtn" data-t="mobility">Movilidad urbana</button>
-    <button class="tbtn" data-t="transport">Transporte</button>
-    <button class="tbtn" data-t="training">Formación</button>
-    <button class="tbtn" data-t="infrastr">Infraestructuras</button>
-    <button class="tbtn" data-t="smart">Smart cities</button>
-    <button class="tbtn" data-t="green">Movilidad verde</button>
+  <!-- Filtro 2: por tipo de convocatoria -->
+  <div class="filter-label">Filtrar por tipo</div>
+  <div class="types" id="types">
+    <button class="tbtn on" data-c="all">Todas</button>
+    <button class="tbtn" data-c="opencall"><span class="dot" style="background:#52d68a"></span>Open Calls</button>
+    <button class="tbtn" data-c="licitacion"><span class="dot" style="background:#5aaff0"></span>Licitaciones</button>
+    <button class="tbtn" data-c="beca"><span class="dot" style="background:#c084fc"></span>Becas</button>
   </div>
 </div>
 
@@ -204,7 +214,7 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
   </div>
   <div class="status-r">
     <div class="searchbox">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8a8478" stroke-width="2.5">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
       <input type="text" id="searchInput" placeholder="Buscar convocatoria…"/>
@@ -226,8 +236,7 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 <script>
 /* ─── CONFIG ──────────────────────────────────── */
 const DATA_URL    = './data.json';
-const WEEK_START  = '2026-04-27';   // Lunes de esta semana — solo mostramos desde aquí
-const REFRESH_MS  = 60000;          // La página auto-recarga cada minuto
+const REFRESH_MS  = 60000;          // Auto-recarga del JSON cada minuto
 
 /* ─── MAPS ────────────────────────────────────── */
 const BADGE  = {mobility:'b-mobility',transport:'b-transport',training:'b-training',infrastr:'b-infrastr',smart:'b-smart',green:'b-green',other:'b-other'};
@@ -235,20 +244,22 @@ const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN
 
 /* ─── STATE ───────────────────────────────────── */
 let allTenders     = [];
-let activeTopic    = 'all';
+let activeType     = 'all';   // all | opencall | licitacion | beca
 let activePlatform = 'all';
 let sortDir        = 'desc';   // 'desc' = más reciente primero (por defecto)
 
-/* ─── DETECT CALL TYPE ────────────────────────── */
+/* ─── DETECT CALL TYPE ──────────────────────────
+   Devuelve {l: label visible, c: clase css, k: key para filtrar}
+   k ∈ {'opencall', 'licitacion', 'beca', 'other'}                  */
 function callType(t) {
   const s = (t.title+' '+(t.description||'')+' '+(t.platform||'')).toLowerCase();
-  if (/master school|fellowship|beca|scholarship/i.test(s)) return {l:'Beca / Fellowship', c:'tp-beca'};
-  if (/open call|call for proposal/i.test(s))               return {l:'Open Call',         c:'tp-opencall'};
-  if (/formación|training|master|curso|education/i.test(s)) return {l:'Formación',          c:'tp-formacion'};
-  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación', c:'tp-licitacion'};
-  if (/concurso|competition|prize/i.test(s))                return {l:'Concurso',           c:'tp-concurso'};
-  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',  c:'tp-opencall'};
-  return {l:'Convocatoria', c:'tp-other'};
+  if (/master school|fellowship|beca|scholarship/i.test(s))  return {l:'Beca / Fellowship', c:'tp-beca',       k:'beca'};
+  if (/open call|call for proposal/i.test(s))                return {l:'Open Call',         c:'tp-opencall',   k:'opencall'};
+  if (/formación|training|master|curso|education/i.test(s))  return {l:'Formación',         c:'tp-formacion',  k:'beca'};
+  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación', c:'tp-licitacion', k:'licitacion'};
+  if (/concurso|competition|prize/i.test(s))                 return {l:'Concurso',          c:'tp-concurso',   k:'licitacion'};
+  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',   c:'tp-opencall',   k:'opencall'};
+  return {l:'Convocatoria', c:'tp-other', k:'other'};
 }
 
 /* ─── DETECT COUNTRY ──────────────────────────── */
@@ -288,7 +299,11 @@ function dateVal(d) {
   return d;
 }
 
-/* ─── LOAD ────────────────────────────────────── */
+/* ─── LOAD ──────────────────────────────────────
+   manual = true cuando el usuario pulsa el botón.
+   En ese caso, además de recargar el JSON, registramos la hora local
+   real en localStorage para mostrarla como "última actualización"
+   percibida por quien consulta.                                  */
 async function loadData(manual = false) {
   const btn = document.getElementById('btnRefresh');
   document.getElementById('loader').classList.add('show');
@@ -302,13 +317,32 @@ async function loadData(manual = false) {
     if (!r.ok) throw new Error(r.status);
     const d = await r.json();
 
-    // Filter: only tenders from WEEK_START onwards
+    // Filtramos las convocatorias cuyo deadline (cierre) ya ha pasado.
+    // Las que no tienen deadline (ej. algunas licitaciones TED) se mantienen.
+    const today = new Date().toISOString().slice(0, 10);   // 'YYYY-MM-DD'
     allTenders = (d.tenders || []).filter(t => {
-      if (!t.date) return true;          // no date → include anyway
-      return t.date >= WEEK_START;
+      if (!t.deadline) return true;          // sin cierre → seguir mostrando
+      return t.deadline >= today;            // cierre hoy o futuro → mostrar
     });
 
-    setUpdated(d.last_updated);
+    // Hora a mostrar:
+    // - Si fue una actualización manual → la hora local de AHORA
+    //   (porque la persona acaba de pulsar el botón y se ha
+    //   refrescado la web con los datos del JSON ahora mismo)
+    // - Si fue carga automática → la hora del último fetch del bot
+    if (manual) {
+      const nowIso = new Date().toISOString();
+      try { localStorage.setItem('radareu_last_refresh', nowIso); } catch(_) {}
+      setUpdated(nowIso, true);
+    } else {
+      // En carga automática usamos la última manual del usuario
+      // si existe, sino la del bot (last_updated del JSON)
+      let stored = null;
+      try { stored = localStorage.getItem('radareu_last_refresh'); } catch(_) {}
+      if (stored) setUpdated(stored, true);
+      else        setUpdated(d.last_updated, false);
+    }
+
     render();
 
     if (manual) {
@@ -333,10 +367,11 @@ function render() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
   let rows = allTenders.filter(t => {
-    const okT = activeTopic    === 'all' || t.topic === activeTopic;
-    const okP = activePlatform === 'all' || (t.platform||'') === activePlatform;
-    const okQ = !q || [t.title, t.platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
-    return okT && okP && okQ;
+    const ct = callType(t);
+    const okType = activeType === 'all' || ct.k === activeType;
+    const okP    = activePlatform === 'all' || (t.platform||'') === activePlatform;
+    const okQ    = !q || [t.title, t.platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
+    return okType && okP && okQ;
   });
 
   // ── Sort by date ──────────────────────────────
@@ -421,14 +456,17 @@ function showEmpty(h, p) {
     `<div class="empty"><div class="empty-icon">⊙</div><h3>${h}</h3><p>${p}</p></div>`;
 }
 
-/* ─── LAST UPDATED ────────────────────────────── */
-function setUpdated(iso) {
+/* ─── LAST UPDATED ──────────────────────────────
+   manualFlag: si la fecha es de la última pulsación de Actualizar,
+   mostramos también minutos exactos para que se vea "vivo".       */
+function setUpdated(iso, manualFlag) {
   const el = document.getElementById('lastUpdate');
   if (!iso) { el.textContent = 'Sin datos'; return; }
   try {
     const d = new Date(iso);
-    el.textContent = 'Actualizado: ' + d.toLocaleString('es-ES',
+    const txt = d.toLocaleString('es-ES',
       {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+    el.textContent = (manualFlag ? 'Actualizado: ' : 'Última búsqueda: ') + txt;
   } catch { el.textContent = 'Actualizado'; }
 }
 
@@ -453,10 +491,10 @@ function startCountdown() {
 /* ─── EVENTS ──────────────────────────────────── */
 document.getElementById('btnRefresh').addEventListener('click', () => loadData(true));
 
-document.getElementById('topics').addEventListener('click', e => {
+document.getElementById('types').addEventListener('click', e => {
   const b = e.target.closest('.tbtn'); if (!b) return;
   document.querySelectorAll('.tbtn').forEach(x => x.classList.remove('on'));
-  b.classList.add('on'); activeTopic = b.dataset.t; render();
+  b.classList.add('on'); activeType = b.dataset.c; render();
 });
 
 document.getElementById('platforms').addEventListener('click', e => {
