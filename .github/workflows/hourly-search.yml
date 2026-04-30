@@ -1,35 +1,39 @@
 name: 🔍 Fetch licitaciones europeas (gratuito)
- 
+
 # Ejecuta el fetcher 3 veces al día.
 # No necesita ninguna API key ni secret.
 # Usa solo feeds RSS públicos de las plataformas europeas.
- 
+
 on:
   schedule:
     - cron: '0 6  * * *'   # 06:00 UTC → 08:00 España
     - cron: '0 10 * * *'   # 10:00 UTC → 12:00 España
     - cron: '0 14 * * *'   # 14:00 UTC → 16:00 España
   workflow_dispatch:        # Permite lanzarlo manualmente desde Actions
- 
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
     permissions:
       contents: write
- 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
- 
+
       - name: Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          # ⚡ Sin pip install — usa solo la librería estándar de Python
- 
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install --quiet -r scripts/requirements.txt
+
       - name: Ejecutar fetcher
         run: python scripts/search.py
- 
+
       - name: Commit y push
         run: |
           git config user.name  "Radar EU Bot"
@@ -38,4 +42,3 @@ jobs:
           git diff --staged --quiet \
             && echo "ℹ Sin cambios nuevos" \
             || (git commit -m "🔍 Fetch — $(date -u +'%d/%m/%Y %H:%M UTC')" && git push)
- 
