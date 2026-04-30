@@ -1,0 +1,37 @@
+name: 🔍 Búsqueda automática cada hora
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # Cada hora en punto (UTC)
+  workflow_dispatch:       # También se puede lanzar manualmente desde Actions
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install anthropic
+
+      - name: Ejecutar búsqueda con IA
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/search.py
+
+      - name: Commit y push de resultados
+        run: |
+          git config user.name  "Radar EU Bot"
+          git config user.email "radar-eu-bot@noreply.github.com"
+          git add data.json
+          git diff --staged --quiet && echo "Sin cambios nuevos" || \
+          git commit -m "🔍 Actualización automática — $(date -u +'%d/%m/%Y %H:%M UTC')" && git push

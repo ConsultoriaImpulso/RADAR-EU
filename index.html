@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Radar EU · Licitaciones Europeas</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇪🇺</text></svg>"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#111;--bg2:#181818;--bg3:#1e1e1e;
+  --bdr:rgba(255,255,255,.09);--bdr2:rgba(255,255,255,.05);
+  --white:#f0ece4;--muted:#888;--muted2:#555;
+  --gold:#d4a843;--green:#3dba7c;--r:8px;--r2:12px;
+}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:14px;}
+
+/* HEADER */
+.hdr{padding:2rem 2.5rem 1.5rem;max-width:1360px;margin:0 auto;}
+.eu-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bdr);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;margin-bottom:1rem;}
+.eu-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hdr h1{font-size:1.85rem;font-weight:700;letter-spacing:-.025em;margin-bottom:.35rem;}
+.hdr .sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
+
+/* PLATFORM PILLS */
+.platforms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.4rem;}
+.ptag{font-size:11px;padding:4px 13px;border:1px solid var(--bdr);border-radius:20px;color:var(--muted);cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;}
+.ptag:hover,.ptag.on{border-color:rgba(255,255,255,.3);color:var(--white);background:rgba(255,255,255,.06);}
+
+/* TOPIC BUTTONS */
+.topics{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
+.tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;}
+.tbtn:hover{border-color:rgba(255,255,255,.22);background:var(--bg3);}
+.tbtn.on{background:var(--white);color:var(--bg);border-color:var(--white);}
+
+/* STATUS BAR */
+.statusbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;padding:0 2.5rem .9rem;max-width:1360px;margin:0 auto;}
+.status-l{display:flex;align-items:center;gap:.6rem;font-size:12px;color:var(--muted);}
+.udot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.countdown{font-size:11px;color:var(--muted2);}
+.searchbox{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:6px 12px;}
+.searchbox input{background:transparent;border:none;outline:none;color:var(--white);font-size:12px;font-family:inherit;width:210px;}
+.searchbox input::placeholder{color:var(--muted2);}
+
+/* RESULTS */
+.results{max-width:1360px;margin:0 auto;padding:0 2.5rem 3rem;}
+.counter{display:flex;align-items:baseline;gap:.75rem;margin-bottom:1rem;}
+.counter .n{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;}
+.counter .lbl{color:var(--muted);font-size:12px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--bdr);border-radius:var(--r2);}
+table{width:100%;border-collapse:collapse;}
+colgroup .c1{width:32%;}
+colgroup .c2{width:10%;}
+colgroup .c3{width:22%;}
+colgroup .c4{width:14%;}
+colgroup .c5{width:8%;}
+
+thead tr{background:var(--bg2);border-bottom:1px solid var(--bdr);}
+thead th{padding:11px 14px;font-size:10.5px;font-weight:600;letter-spacing:.07em;color:var(--muted);text-align:left;white-space:nowrap;}
+
+tbody tr{border-bottom:1px solid var(--bdr2);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.03);}
+tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;}
+
+/* COL 1 — Convocatoria */
+.td-title{font-weight:500;color:var(--white);margin-bottom:5px;line-height:1.4;}
+.td-country{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);}
+.td-deadline{font-size:11px;color:var(--muted);margin-top:4px;}
+.topic-tag{display:inline-block;font-size:9px;padding:1px 7px;border-radius:20px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle;position:relative;top:-1px;}
+.b-mobility{background:#0e3d28;color:#52d68a;}
+.b-transport{background:#0d2e4a;color:#5aaff0;}
+.b-training{background:#3d2a0a;color:#e0a84a;}
+.b-infrastr{background:#2a2a2a;color:#aaa;}
+.b-smart{background:#1a2e3a;color:#4ac8d4;}
+.b-green{background:#0e3020;color:#40d4a0;}
+.b-other{background:#222;color:#888;}
+
+/* COL 2 — Fecha */
+.td-date{color:var(--muted);font-size:12px;white-space:nowrap;}
+
+/* COL 3 — Entidad + tipo */
+.td-entity{color:var(--white);font-size:12px;margin-bottom:5px;}
+.type-pill{display:inline-block;font-size:10px;padding:2px 9px;border-radius:20px;font-weight:600;letter-spacing:.03em;}
+.tp-opencall{background:#0e3d28;color:#52d68a;}
+.tp-licitacion{background:#0d2e4a;color:#5aaff0;}
+.tp-concurso{background:#3d2a0a;color:#e0a84a;}
+.tp-beca{background:#2a1a3d;color:#c084fc;}
+.tp-formacion{background:#3d2a0a;color:#e0a84a;}
+.tp-other{background:#222;color:#888;}
+
+/* COL 4 — Valor */
+.td-budget{color:var(--gold);font-size:12px;font-weight:500;}
+.td-budget.empty{color:var(--muted2);}
+
+/* COL 5 — Link */
+.td-link{text-align:center;}
+.link-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--gold);text-decoration:none;padding:5px 12px;border:1px solid rgba(212,168,67,.3);border-radius:20px;transition:all .15s;white-space:nowrap;}
+.link-btn:hover{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.6);}
+
+/* EMPTY */
+.empty{padding:4rem 2rem;text-align:center;color:var(--muted);border:1px dashed var(--bdr);border-radius:var(--r2);}
+.empty-icon{font-size:2rem;margin-bottom:.75rem;opacity:.35;}
+.empty h3{font-size:.95rem;color:var(--muted);margin-bottom:.35rem;}
+.empty p{font-size:12px;}
+
+/* LOADING */
+.loader{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:99;}
+.loader.show{opacity:1;}
+.spin{width:12px;height:12px;border:1.5px solid var(--bdr);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:700px){
+  .hdr,.statusbar,.results{padding-left:1rem;padding-right:1rem;}
+  .hdr h1{font-size:1.3rem;}
+  thead th:nth-child(2),thead th:nth-child(4),
+  tbody td:nth-child(2),tbody td:nth-child(4){display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="eu-badge"><span class="eu-dot"></span>EU ALERT SYSTEM</div>
+  <h1>Radar de Licitaciones Europeas</h1>
+  <p class="sub">Movilidad · Transporte · Formación · Open Calls</p>
+
+  <div class="platforms" id="platforms">
+    <button class="ptag on" data-p="all">Todas las plataformas</button>
+    <button class="ptag" data-p="TED / SIMAP">TED / SIMAP</button>
+    <button class="ptag" data-p="EU Funding & Tenders Portal">EU Funding &amp; Tenders</button>
+    <button class="ptag" data-p="CINEA">CINEA</button>
+    <button class="ptag" data-p="EACEA">EACEA</button>
+    <button class="ptag" data-p="EIT Urban Mobility">EIT Urban Mobility</button>
+    <button class="ptag" data-p="Eltis">Eltis</button>
+    <button class="ptag" data-p="Horizon Europe">Horizon Europe</button>
+    <button class="ptag" data-p="CEF Transport">CEF Transport</button>
+  </div>
+
+  <div class="topics" id="topics">
+    <button class="tbtn on" data-t="all">Todas</button>
+    <button class="tbtn" data-t="mobility">Movilidad urbana</button>
+    <button class="tbtn" data-t="transport">Transporte</button>
+    <button class="tbtn" data-t="training">Formación</button>
+    <button class="tbtn" data-t="infrastr">Infraestructuras</button>
+    <button class="tbtn" data-t="smart">Smart cities</button>
+    <button class="tbtn" data-t="green">Movilidad verde</button>
+  </div>
+</div>
+
+<div class="statusbar">
+  <div class="status-l">
+    <span class="udot"></span>
+    <span id="lastUpdate">Cargando…</span>
+    <span class="countdown" id="countdown"></span>
+  </div>
+  <div class="searchbox">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Buscar convocatoria…"/>
+  </div>
+</div>
+
+<div class="results">
+  <div class="counter">
+    <span class="n" id="countNum">—</span>
+    <span class="lbl">convocatorias esta semana</span>
+  </div>
+  <div id="tableWrap"></div>
+</div>
+
+<div class="loader" id="loader"><div class="spin"></div>Actualizando…</div>
+
+<script>
+const DATA_URL   = './data.json';
+const REFRESH_MS = 60000;
+
+const BADGE  = {mobility:'b-mobility',transport:'b-transport',training:'b-training',infrastr:'b-infrastr',smart:'b-smart',green:'b-green',other:'b-other'};
+const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN',infrastr:'INFRAESTR.',smart:'SMART CITY',green:'VERDE',other:'OTRA'};
+
+let allTenders=[], activeTopic='all', activePlatform='all';
+
+/* ── DETECT CALL TYPE ─────────────────── */
+function callType(t) {
+  const s = (t.title+' '+(t.description||'')+' '+(t.platform||'')).toLowerCase();
+  if (/master school|fellowship|beca|scholarship/i.test(s))   return {l:'Beca / Fellowship',c:'tp-beca'};
+  if (/open call|call for proposal/i.test(s))                 return {l:'Open Call',         c:'tp-opencall'};
+  if (/formación|training|master|curso|education/i.test(s))   return {l:'Formación',          c:'tp-formacion'};
+  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación',c:'tp-licitacion'};
+  if (/concurso|competition|prize/i.test(s))                  return {l:'Concurso',           c:'tp-concurso'};
+  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',    c:'tp-opencall'};
+  return {l:'Convocatoria',c:'tp-other'};
+}
+
+/* ── DETECT COUNTRY ───────────────────── */
+function country(t) {
+  const s = (t.title+' '+(t.description||'')).toLowerCase();
+  const map=[
+    [/czech|cheq|praga|ostrava|slezsko/,'🇨🇿 Chequia'],
+    [/norueg|norway|kristiansand/,'🇳🇴 Noruega'],
+    [/poland|polonia|krak[oó]w|polsk|miejsk/,'🇵🇱 Polonia'],
+    [/portugal/,'🇵🇹 Portugal'],
+    [/spain|españa|andaluc|madrid|barcelona|aopja/,'🇪🇸 España'],
+    [/france|francia|saint.etienne|pl[eé]lan/,'🇫🇷 Francia'],
+    [/german|alemania/,'🇩🇪 Alemania'],
+    [/ital|alto adige|sta /,'🇮🇹 Italia'],
+    [/estonia|eesti/,'🇪🇪 Estonia'],
+    [/latvia|letonia/,'🇱🇻 Letonia'],
+    [/croati|croacia/,'🇭🇷 Croacia'],
+  ];
+  for (const [re,label] of map) if (re.test(s)) return label;
+  return '🇪🇺 UE';
+}
+
+function fmtDate(d){
+  if(!d)return'—';
+  try{return new Date(d+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'});}
+  catch{return d;}
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ── LOAD ─────────────────────────────── */
+async function loadData(){
+  document.getElementById('loader').classList.add('show');
+  try{
+    const r=await fetch(DATA_URL+'?t='+Date.now());
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    allTenders=d.tenders||[];
+    setUpdated(d.last_updated);
+    render();
+  }catch(e){
+    document.getElementById('lastUpdate').textContent='⚠ Error al cargar datos';
+    showEmpty('No se pudieron cargar los datos.','Comprueba que data.json existe en el repositorio y que GitHub Pages está activo.');
+  }finally{
+    document.getElementById('loader').classList.remove('show');
+  }
+}
+
+/* ── RENDER ───────────────────────────── */
+function render(){
+  const q=document.getElementById('searchInput').value.trim().toLowerCase();
+  const rows=allTenders.filter(t=>{
+    const okT=activeTopic==='all'||t.topic===activeTopic;
+    const okP=activePlatform==='all'||(t.platform||'')===activePlatform;
+    const okQ=!q||[t.title,t.platform,t.description,t.budget].join(' ').toLowerCase().includes(q);
+    return okT&&okP&&okQ;
+  });
+
+  document.getElementById('countNum').textContent=rows.length;
+  const wrap=document.getElementById('tableWrap');
+
+  if(!rows.length){
+    wrap.innerHTML=`<div class="empty"><div class="empty-icon">⊙</div><h3>${
+      allTenders.length?'Sin resultados para ese filtro':'Sin convocatorias esta semana'
+    }</h3><p>${
+      allTenders.length?'Prueba otro filtro o término de búsqueda.':'El sistema busca automáticamente cada hora.'
+    }</p></div>`;
+    return;
+  }
+
+  const trs=rows.map((t,i)=>{
+    const ct=callType(t);
+    const ctry=country(t);
+    const badge=BADGE[t.topic]||'b-other';
+    const blabel=BLABEL[t.topic]||'OTRA';
+    const hasBudget=t.budget&&t.budget!=='null'&&t.budget!=='Variable'&&t.budget!=='—';
+    const delay=Math.min(i*20,400);
+
+    return `<tr style="animation:fadeUp .22s ease ${delay}ms both">
+  <td>
+    <div class="td-title">${esc(t.title)}<span class="topic-tag ${badge}">${blabel}</span></div>
+    <div class="td-country">${ctry}</div>
+    ${t.deadline?`<div class="td-deadline">⏳ Cierre: ${fmtDate(t.deadline)}</div>`:''}
+  </td>
+  <td class="td-date">${fmtDate(t.date)}</td>
+  <td>
+    <div class="td-entity">${esc(t.platform||'—')}</div>
+    <span class="type-pill ${ct.c}">${ct.l}</span>
+  </td>
+  <td>${hasBudget?`<span class="td-budget">${esc(t.budget)}</span>`:'<span class="td-budget empty">—</span>'}</td>
+  <td class="td-link">${t.url
+    ?`<a class="link-btn" href="${esc(t.url)}" target="_blank" rel="noopener">Ver <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
+    :'<span style="color:var(--muted2);font-size:11px">—</span>'
+  }</td>
+</tr>`;
+  }).join('');
+
+  wrap.innerHTML=`<div class="tbl-wrap"><table>
+  <colgroup><col style="width:32%"/><col style="width:10%"/><col style="width:22%"/><col style="width:14%"/><col style="width:8%"/></colgroup>
+  <thead><tr>
+    <th>CONVOCATORIA · PAÍS / UE</th>
+    <th>PUBLICACIÓN</th>
+    <th>ENTIDAD &amp; TIPO</th>
+    <th>VALOR / FINANCIACIÓN</th>
+    <th style="text-align:center">LINK</th>
+  </tr></thead>
+  <tbody>${trs}</tbody>
+</table></div>`;
+}
+
+function showEmpty(h,p){
+  document.getElementById('countNum').textContent='0';
+  document.getElementById('tableWrap').innerHTML=`<div class="empty"><div class="empty-icon">⊙</div><h3>${h}</h3><p>${p}</p></div>`;
+}
+
+/* ── LAST UPDATED ─────────────────────── */
+function setUpdated(iso){
+  const el=document.getElementById('lastUpdate');
+  if(!iso){el.textContent='Sin datos';return;}
+  try{
+    const d=new Date(iso);
+    el.textContent='Actualizado: '+d.toLocaleString('es-ES',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  }catch{el.textContent='Actualizado';}
+}
+
+/* ── COUNTDOWN ────────────────────────── */
+function startCountdown(){
+  function tick(){
+    const now=new Date(),next=new Date(now);
+    next.setDate(now.getDate()+((7-now.getDay())%7||7));
+    next.setHours(0,0,0,0);
+    const diff=next-now;
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),
+          m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('countdown').textContent=
+      `· Reset en ${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+  }
+  tick();setInterval(tick,1000);
+}
+
+/* ── EVENTS ───────────────────────────── */
+document.getElementById('topics').addEventListener('click',e=>{
+  const b=e.target.closest('.tbtn');if(!b)return;
+  document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');activeTopic=b.dataset.t;render();
+});
+document.getElementById('platforms').addEventListener('click',e=>{
+  const b=e.target.closest('.ptag');if(!b)return;
+  document.querySelectorAll('.ptag').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');activePlatform=b.dataset.p;render();
+});
+document.getElementById('searchInput').addEventListener('input',render);
+
+/* ── INIT ─────────────────────────────── */
+loadData();
+startCountdown();
+setInterval(loadData,REFRESH_MS);
+</script>
+</body>
+</html>
