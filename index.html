@@ -15,7 +15,7 @@
 }
 body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:14px;}
 
-/* HEADER */
+/* ── HEADER ─────────────────────────────────── */
 .hdr{padding:2rem 2.5rem 1.5rem;max-width:1360px;margin:0 auto;}
 .eu-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bdr);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;margin-bottom:1rem;}
 .eu-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2.2s ease-in-out infinite;}
@@ -23,43 +23,81 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:
 .hdr h1{font-size:1.85rem;font-weight:700;letter-spacing:-.025em;margin-bottom:.35rem;}
 .hdr .sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
 
-/* PLATFORM PILLS */
+/* ── PLATFORM PILLS ─────────────────────────── */
 .platforms{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.4rem;}
 .ptag{font-size:11px;padding:4px 13px;border:1px solid var(--bdr);border-radius:20px;color:var(--muted);cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;}
 .ptag:hover,.ptag.on{border-color:rgba(255,255,255,.3);color:var(--white);background:rgba(255,255,255,.06);}
 
-/* TOPIC BUTTONS */
+/* ── TOPIC BUTTONS ──────────────────────────── */
 .topics{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
 .tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;}
 .tbtn:hover{border-color:rgba(255,255,255,.22);background:var(--bg3);}
 .tbtn.on{background:var(--white);color:var(--bg);border-color:var(--white);}
 
-/* STATUS BAR */
+/* ── STATUS BAR ─────────────────────────────── */
 .statusbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;padding:0 2.5rem .9rem;max-width:1360px;margin:0 auto;}
-.status-l{display:flex;align-items:center;gap:.6rem;font-size:12px;color:var(--muted);}
-.udot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.status-l{display:flex;align-items:center;gap:.75rem;font-size:12px;color:var(--muted);flex-wrap:wrap;}
+.udot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .countdown{font-size:11px;color:var(--muted2);}
+
+/* ── REFRESH BUTTON ─────────────────────────── */
+.btn-refresh{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;
+  border:1px solid var(--bdr);
+  border-radius:20px;
+  background:transparent;
+  color:var(--muted);
+  font-size:11px;font-weight:500;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .15s;
+  flex-shrink:0;
+}
+.btn-refresh:hover{border-color:rgba(255,255,255,.3);color:var(--white);background:rgba(255,255,255,.06);}
+.btn-refresh:disabled{opacity:.4;cursor:not-allowed;}
+.btn-refresh .ico{display:inline-block;transition:transform .5s;}
+.btn-refresh.spinning .ico{animation:spin-once .6s linear;}
+@keyframes spin-once{to{transform:rotate(360deg);}}
+
+/* ── SEARCH BOX ─────────────────────────────── */
+.status-r{display:flex;align-items:center;gap:8px;}
 .searchbox{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:6px 12px;}
-.searchbox input{background:transparent;border:none;outline:none;color:var(--white);font-size:12px;font-family:inherit;width:210px;}
+.searchbox input{background:transparent;border:none;outline:none;color:var(--white);font-size:12px;font-family:inherit;width:200px;}
 .searchbox input::placeholder{color:var(--muted2);}
 
-/* RESULTS */
+/* ── RESULTS ────────────────────────────────── */
 .results{max-width:1360px;margin:0 auto;padding:0 2.5rem 3rem;}
-.counter{display:flex;align-items:baseline;gap:.75rem;margin-bottom:1rem;}
+.counter{display:flex;align-items:baseline;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;}
 .counter .n{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;}
 .counter .lbl{color:var(--muted);font-size:12px;}
 
-/* TABLE */
+/* ── TABLE ──────────────────────────────────── */
 .tbl-wrap{overflow-x:auto;border:1px solid var(--bdr);border-radius:var(--r2);}
 table{width:100%;border-collapse:collapse;}
-colgroup .c1{width:32%;}
-colgroup .c2{width:10%;}
-colgroup .c3{width:22%;}
-colgroup .c4{width:14%;}
-colgroup .c5{width:8%;}
 
 thead tr{background:var(--bg2);border-bottom:1px solid var(--bdr);}
-thead th{padding:11px 14px;font-size:10.5px;font-weight:600;letter-spacing:.07em;color:var(--muted);text-align:left;white-space:nowrap;}
+thead th{
+  padding:11px 14px;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;color:var(--muted);text-align:left;
+  white-space:nowrap;user-select:none;
+}
+
+/* ── SORT HEADER ────────────────────────────── */
+.th-sort{
+  cursor:pointer;
+  transition:color .15s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.th-sort:hover{color:var(--white);}
+.th-sort.asc  .arrow::after{content:'↑';}
+.th-sort.desc .arrow::after{content:'↓';}
+.th-sort .arrow{
+  font-size:12px;color:var(--gold);
+  opacity:0;transition:opacity .15s;
+}
+.th-sort.asc  .arrow,
+.th-sort.desc .arrow{opacity:1;}
 
 tbody tr{border-bottom:1px solid var(--bdr2);transition:background .12s;}
 tbody tr:last-child{border-bottom:none;}
@@ -68,8 +106,8 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 
 /* COL 1 — Convocatoria */
 .td-title{font-weight:500;color:var(--white);margin-bottom:5px;line-height:1.4;}
-.td-country{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);}
-.td-deadline{font-size:11px;color:var(--muted);margin-top:4px;}
+.td-country{font-size:11px;color:var(--muted);margin-top:3px;}
+.td-deadline{font-size:11px;color:var(--muted);margin-top:3px;}
 .topic-tag{display:inline-block;font-size:9px;padding:1px 7px;border-radius:20px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle;position:relative;top:-1px;}
 .b-mobility{background:#0e3d28;color:#52d68a;}
 .b-transport{background:#0d2e4a;color:#5aaff0;}
@@ -101,14 +139,14 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 .link-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--gold);text-decoration:none;padding:5px 12px;border:1px solid rgba(212,168,67,.3);border-radius:20px;transition:all .15s;white-space:nowrap;}
 .link-btn:hover{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.6);}
 
-/* EMPTY */
+/* ── EMPTY ──────────────────────────────────── */
 .empty{padding:4rem 2rem;text-align:center;color:var(--muted);border:1px dashed var(--bdr);border-radius:var(--r2);}
 .empty-icon{font-size:2rem;margin-bottom:.75rem;opacity:.35;}
 .empty h3{font-size:.95rem;color:var(--muted);margin-bottom:.35rem;}
 .empty p{font-size:12px;}
 
-/* LOADING */
-.loader{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:99;}
+/* ── LOADING TOAST ──────────────────────────── */
+.loader{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;}
 .loader.show{opacity:1;}
 .spin{width:12px;height:12px;border:1.5px solid var(--bdr);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -119,11 +157,13 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
   .hdr h1{font-size:1.3rem;}
   thead th:nth-child(2),thead th:nth-child(4),
   tbody td:nth-child(2),tbody td:nth-child(4){display:none;}
+  .searchbox input{width:130px;}
 }
 </style>
 </head>
 <body>
 
+<!-- ══ HEADER ══════════════════════════════════ -->
 <div class="hdr">
   <div class="eu-badge"><span class="eu-dot"></span>EU ALERT SYSTEM</div>
   <h1>Radar de Licitaciones Europeas</h1>
@@ -152,20 +192,27 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
   </div>
 </div>
 
+<!-- ══ STATUS BAR ═══════════════════════════════ -->
 <div class="statusbar">
   <div class="status-l">
     <span class="udot"></span>
     <span id="lastUpdate">Cargando…</span>
     <span class="countdown" id="countdown"></span>
+    <button class="btn-refresh" id="btnRefresh" title="Recargar datos">
+      <span class="ico">↻</span> Actualizar
+    </button>
   </div>
-  <div class="searchbox">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
-    <input type="text" id="searchInput" placeholder="Buscar convocatoria…"/>
+  <div class="status-r">
+    <div class="searchbox">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar convocatoria…"/>
+    </div>
   </div>
 </div>
 
+<!-- ══ RESULTS ══════════════════════════════════ -->
 <div class="results">
   <div class="counter">
     <span class="n" id="countNum">—</span>
@@ -177,27 +224,34 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 <div class="loader" id="loader"><div class="spin"></div>Actualizando…</div>
 
 <script>
-const DATA_URL   = './data.json';
-const REFRESH_MS = 60000;
+/* ─── CONFIG ──────────────────────────────────── */
+const DATA_URL    = './data.json';
+const WEEK_START  = '2026-04-27';   // Lunes de esta semana — solo mostramos desde aquí
+const REFRESH_MS  = 60000;          // La página auto-recarga cada minuto
 
+/* ─── MAPS ────────────────────────────────────── */
 const BADGE  = {mobility:'b-mobility',transport:'b-transport',training:'b-training',infrastr:'b-infrastr',smart:'b-smart',green:'b-green',other:'b-other'};
 const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN',infrastr:'INFRAESTR.',smart:'SMART CITY',green:'VERDE',other:'OTRA'};
 
-let allTenders=[], activeTopic='all', activePlatform='all';
+/* ─── STATE ───────────────────────────────────── */
+let allTenders     = [];
+let activeTopic    = 'all';
+let activePlatform = 'all';
+let sortDir        = 'desc';   // 'desc' = más reciente primero (por defecto)
 
-/* ── DETECT CALL TYPE ─────────────────── */
+/* ─── DETECT CALL TYPE ────────────────────────── */
 function callType(t) {
   const s = (t.title+' '+(t.description||'')+' '+(t.platform||'')).toLowerCase();
-  if (/master school|fellowship|beca|scholarship/i.test(s))   return {l:'Beca / Fellowship',c:'tp-beca'};
-  if (/open call|call for proposal/i.test(s))                 return {l:'Open Call',         c:'tp-opencall'};
-  if (/formación|training|master|curso|education/i.test(s))   return {l:'Formación',          c:'tp-formacion'};
-  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación',c:'tp-licitacion'};
-  if (/concurso|competition|prize/i.test(s))                  return {l:'Concurso',           c:'tp-concurso'};
-  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',    c:'tp-opencall'};
-  return {l:'Convocatoria',c:'tp-other'};
+  if (/master school|fellowship|beca|scholarship/i.test(s)) return {l:'Beca / Fellowship', c:'tp-beca'};
+  if (/open call|call for proposal/i.test(s))               return {l:'Open Call',         c:'tp-opencall'};
+  if (/formación|training|master|curso|education/i.test(s)) return {l:'Formación',          c:'tp-formacion'};
+  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación', c:'tp-licitacion'};
+  if (/concurso|competition|prize/i.test(s))                return {l:'Concurso',           c:'tp-concurso'};
+  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',  c:'tp-opencall'};
+  return {l:'Convocatoria', c:'tp-other'};
 }
 
-/* ── DETECT COUNTRY ───────────────────── */
+/* ─── DETECT COUNTRY ──────────────────────────── */
 function country(t) {
   const s = (t.title+' '+(t.description||'')).toLowerCase();
   const map=[
@@ -217,141 +271,206 @@ function country(t) {
   return '🇪🇺 UE';
 }
 
-function fmtDate(d){
-  if(!d)return'—';
-  try{return new Date(d+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'});}
-  catch{return d;}
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}); }
+  catch { return d; }
 }
 
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-/* ── LOAD ─────────────────────────────── */
-async function loadData(){
+/* ─── DATE COMPARISON ─────────────────────────── */
+function dateVal(d) {
+  // Returns a comparable value; tenders without date get placed last
+  if (!d) return sortDir === 'desc' ? '0000-00-00' : '9999-99-99';
+  return d;
+}
+
+/* ─── LOAD ────────────────────────────────────── */
+async function loadData(manual = false) {
+  const btn = document.getElementById('btnRefresh');
   document.getElementById('loader').classList.add('show');
-  try{
-    const r=await fetch(DATA_URL+'?t='+Date.now());
-    if(!r.ok)throw new Error(r.status);
-    const d=await r.json();
-    allTenders=d.tenders||[];
+  if (manual) {
+    btn.disabled = true;
+    btn.classList.add('spinning');
+  }
+
+  try {
+    const r = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+
+    // Filter: only tenders from WEEK_START onwards
+    allTenders = (d.tenders || []).filter(t => {
+      if (!t.date) return true;          // no date → include anyway
+      return t.date >= WEEK_START;
+    });
+
     setUpdated(d.last_updated);
     render();
-  }catch(e){
-    document.getElementById('lastUpdate').textContent='⚠ Error al cargar datos';
-    showEmpty('No se pudieron cargar los datos.','Comprueba que data.json existe en el repositorio y que GitHub Pages está activo.');
-  }finally{
+
+    if (manual) {
+      // Brief green flash on the dot
+      const dot = document.querySelector('.udot');
+      dot.style.background = '#3dba7c';
+      dot.style.boxShadow  = '0 0 8px #3dba7c';
+      setTimeout(() => { dot.style.background=''; dot.style.boxShadow=''; }, 1000);
+    }
+  } catch(e) {
+    document.getElementById('lastUpdate').textContent = '⚠ Error al cargar datos';
+    showEmpty('No se pudieron cargar los datos.', 'Comprueba que data.json existe en el repositorio.');
+  } finally {
     document.getElementById('loader').classList.remove('show');
+    btn.disabled = false;
+    btn.classList.remove('spinning');
   }
 }
 
-/* ── RENDER ───────────────────────────── */
-function render(){
-  const q=document.getElementById('searchInput').value.trim().toLowerCase();
-  const rows=allTenders.filter(t=>{
-    const okT=activeTopic==='all'||t.topic===activeTopic;
-    const okP=activePlatform==='all'||(t.platform||'')===activePlatform;
-    const okQ=!q||[t.title,t.platform,t.description,t.budget].join(' ').toLowerCase().includes(q);
-    return okT&&okP&&okQ;
+/* ─── RENDER ──────────────────────────────────── */
+function render() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  let rows = allTenders.filter(t => {
+    const okT = activeTopic    === 'all' || t.topic === activeTopic;
+    const okP = activePlatform === 'all' || (t.platform||'') === activePlatform;
+    const okQ = !q || [t.title, t.platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
+    return okT && okP && okQ;
   });
 
-  document.getElementById('countNum').textContent=rows.length;
-  const wrap=document.getElementById('tableWrap');
+  // ── Sort by date ──────────────────────────────
+  rows.sort((a, b) => {
+    const va = dateVal(a.date);
+    const vb = dateVal(b.date);
+    return sortDir === 'desc'
+      ? vb.localeCompare(va)
+      : va.localeCompare(vb);
+  });
 
-  if(!rows.length){
-    wrap.innerHTML=`<div class="empty"><div class="empty-icon">⊙</div><h3>${
-      allTenders.length?'Sin resultados para ese filtro':'Sin convocatorias esta semana'
-    }</h3><p>${
-      allTenders.length?'Prueba otro filtro o término de búsqueda.':'El sistema busca automáticamente cada hora.'
-    }</p></div>`;
+  document.getElementById('countNum').textContent = rows.length;
+  const wrap = document.getElementById('tableWrap');
+
+  if (!rows.length) {
+    wrap.innerHTML = `<div class="empty"><div class="empty-icon">⊙</div>
+      <h3>${allTenders.length ? 'Sin resultados para ese filtro' : 'Sin convocatorias esta semana'}</h3>
+      <p>${allTenders.length ? 'Prueba otro filtro o término.' : 'El sistema actualiza automáticamente 3 veces al día.'}</p>
+    </div>`;
     return;
   }
 
-  const trs=rows.map((t,i)=>{
-    const ct=callType(t);
-    const ctry=country(t);
-    const badge=BADGE[t.topic]||'b-other';
-    const blabel=BLABEL[t.topic]||'OTRA';
-    const hasBudget=t.budget&&t.budget!=='null'&&t.budget!=='Variable'&&t.budget!=='—';
-    const delay=Math.min(i*20,400);
+  const arrowClass = `th-sort ${sortDir}`;
+
+  const trs = rows.map((t, i) => {
+    const ct    = callType(t);
+    const ctry  = country(t);
+    const badge = BADGE[t.topic]  || 'b-other';
+    const blbl  = BLABEL[t.topic] || 'OTRA';
+    const hasBudget = t.budget && t.budget !== 'null' && t.budget !== 'Variable' && t.budget !== '—';
+    const delay = Math.min(i * 18, 400);
 
     return `<tr style="animation:fadeUp .22s ease ${delay}ms both">
   <td>
-    <div class="td-title">${esc(t.title)}<span class="topic-tag ${badge}">${blabel}</span></div>
+    <div class="td-title">${esc(t.title)}<span class="topic-tag ${badge}">${blbl}</span></div>
     <div class="td-country">${ctry}</div>
-    ${t.deadline?`<div class="td-deadline">⏳ Cierre: ${fmtDate(t.deadline)}</div>`:''}
+    ${t.deadline ? `<div class="td-deadline">⏳ Cierre: ${fmtDate(t.deadline)}</div>` : ''}
   </td>
   <td class="td-date">${fmtDate(t.date)}</td>
   <td>
     <div class="td-entity">${esc(t.platform||'—')}</div>
     <span class="type-pill ${ct.c}">${ct.l}</span>
   </td>
-  <td>${hasBudget?`<span class="td-budget">${esc(t.budget)}</span>`:'<span class="td-budget empty">—</span>'}</td>
+  <td>${hasBudget
+    ? `<span class="td-budget">${esc(t.budget)}</span>`
+    : `<span class="td-budget empty">—</span>`}</td>
   <td class="td-link">${t.url
-    ?`<a class="link-btn" href="${esc(t.url)}" target="_blank" rel="noopener">Ver <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
-    :'<span style="color:var(--muted2);font-size:11px">—</span>'
-  }</td>
+    ? `<a class="link-btn" href="${esc(t.url)}" target="_blank" rel="noopener">Ver <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
+    : '<span style="color:var(--muted2);font-size:11px">—</span>'}</td>
 </tr>`;
   }).join('');
 
-  wrap.innerHTML=`<div class="tbl-wrap"><table>
-  <colgroup><col style="width:32%"/><col style="width:10%"/><col style="width:22%"/><col style="width:14%"/><col style="width:8%"/></colgroup>
+  wrap.innerHTML = `<div class="tbl-wrap"><table>
+  <colgroup>
+    <col style="width:32%"/><col style="width:10%"/>
+    <col style="width:22%"/><col style="width:14%"/><col style="width:8%"/>
+  </colgroup>
   <thead><tr>
     <th>CONVOCATORIA · PAÍS / UE</th>
-    <th>PUBLICACIÓN</th>
+    <th>
+      <span class="${arrowClass}" id="sortBtn" title="Ordenar por fecha">
+        PUBLICACIÓN <span class="arrow"></span>
+      </span>
+    </th>
     <th>ENTIDAD &amp; TIPO</th>
     <th>VALOR / FINANCIACIÓN</th>
     <th style="text-align:center">LINK</th>
   </tr></thead>
   <tbody>${trs}</tbody>
 </table></div>`;
+
+  // Bind sort click (must re-bind after each render)
+  document.getElementById('sortBtn').addEventListener('click', () => {
+    sortDir = sortDir === 'desc' ? 'asc' : 'desc';
+    render();
+  });
 }
 
-function showEmpty(h,p){
-  document.getElementById('countNum').textContent='0';
-  document.getElementById('tableWrap').innerHTML=`<div class="empty"><div class="empty-icon">⊙</div><h3>${h}</h3><p>${p}</p></div>`;
+function showEmpty(h, p) {
+  document.getElementById('countNum').textContent = '0';
+  document.getElementById('tableWrap').innerHTML =
+    `<div class="empty"><div class="empty-icon">⊙</div><h3>${h}</h3><p>${p}</p></div>`;
 }
 
-/* ── LAST UPDATED ─────────────────────── */
-function setUpdated(iso){
-  const el=document.getElementById('lastUpdate');
-  if(!iso){el.textContent='Sin datos';return;}
-  try{
-    const d=new Date(iso);
-    el.textContent='Actualizado: '+d.toLocaleString('es-ES',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-  }catch{el.textContent='Actualizado';}
+/* ─── LAST UPDATED ────────────────────────────── */
+function setUpdated(iso) {
+  const el = document.getElementById('lastUpdate');
+  if (!iso) { el.textContent = 'Sin datos'; return; }
+  try {
+    const d = new Date(iso);
+    el.textContent = 'Actualizado: ' + d.toLocaleString('es-ES',
+      {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+  } catch { el.textContent = 'Actualizado'; }
 }
 
-/* ── COUNTDOWN ────────────────────────── */
-function startCountdown(){
-  function tick(){
-    const now=new Date(),next=new Date(now);
-    next.setDate(now.getDate()+((7-now.getDay())%7||7));
-    next.setHours(0,0,0,0);
-    const diff=next-now;
-    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),
-          m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
-    document.getElementById('countdown').textContent=
+/* ─── COUNTDOWN ───────────────────────────────── */
+function startCountdown() {
+  function tick() {
+    const now  = new Date();
+    const next = new Date(now);
+    next.setDate(now.getDate() + ((7 - now.getDay()) % 7 || 7));
+    next.setHours(0, 0, 0, 0);
+    const diff = next - now;
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    document.getElementById('countdown').textContent =
       `· Reset en ${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
   }
-  tick();setInterval(tick,1000);
+  tick(); setInterval(tick, 1000);
 }
 
-/* ── EVENTS ───────────────────────────── */
-document.getElementById('topics').addEventListener('click',e=>{
-  const b=e.target.closest('.tbtn');if(!b)return;
-  document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');activeTopic=b.dataset.t;render();
-});
-document.getElementById('platforms').addEventListener('click',e=>{
-  const b=e.target.closest('.ptag');if(!b)return;
-  document.querySelectorAll('.ptag').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');activePlatform=b.dataset.p;render();
-});
-document.getElementById('searchInput').addEventListener('input',render);
+/* ─── EVENTS ──────────────────────────────────── */
+document.getElementById('btnRefresh').addEventListener('click', () => loadData(true));
 
-/* ── INIT ─────────────────────────────── */
+document.getElementById('topics').addEventListener('click', e => {
+  const b = e.target.closest('.tbtn'); if (!b) return;
+  document.querySelectorAll('.tbtn').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); activeTopic = b.dataset.t; render();
+});
+
+document.getElementById('platforms').addEventListener('click', e => {
+  const b = e.target.closest('.ptag'); if (!b) return;
+  document.querySelectorAll('.ptag').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); activePlatform = b.dataset.p; render();
+});
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+/* ─── INIT ────────────────────────────────────── */
 loadData();
 startCountdown();
-setInterval(loadData,REFRESH_MS);
+setInterval(() => loadData(false), REFRESH_MS);
 </script>
 </body>
 </html>
