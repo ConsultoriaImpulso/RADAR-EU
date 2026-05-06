@@ -326,16 +326,21 @@ def _ted_notice_to_tender(n: dict) -> Optional[Tender]:
     if not title:
         return None
     pubn = n.get('publication-number', '')
-    links = n.get('links') or {}
-    if isinstance(links, dict):
-        # Preferimos español si está disponible
-        html_links = links.get('html') or {}
-        link = (html_links.get('es') or html_links.get('en') or
-                links.get('es') or links.get('en') or '')
-    else:
-        link = ''
-    if not link and pubn:
+
+    # FORZAR URL en español. TED admite /es/notice/-/detail/{pub-num} para
+    # cualquier aviso. NO usamos n['links'] porque a veces solo trae 'en'.
+    if pubn:
         link = f'https://ted.europa.eu/es/notice/-/detail/{pubn}'
+    else:
+        # Fallback excepcional: usar el link que venga (en cualquier idioma)
+        links = n.get('links') or {}
+        if isinstance(links, dict):
+            html_links = links.get('html') or {}
+            link = (html_links.get('es') or html_links.get('en') or
+                    links.get('es') or links.get('en') or '')
+        else:
+            link = ''
+
     buyer = clean(first_lang(n.get('buyer-name')))
     country = clean(first_lang(n.get('buyer-country')))
     desc_parts = []
@@ -813,16 +818,44 @@ def _detect_caf_country(text: str) -> str:
 
 
 def _fetch_caf_url(url: str, sub_platform: str, type_: str) -> list[Tender]:
-    """Scrapea una URL de CAF (convocatorias o licitaciones)."""
+    """
+    Scrapea una URL de CAF (convocatorias o licitaciones).
+
+    CAF tiene un certificado SSL que GitHub Actions no valida por defecto
+    (cadena incompleta). Estrategia de 3 intentos:
+      1. verify=True con bundle de certifi (lo correcto)
+      2. verify=False con warnings silenciados (fallback de emergencia)
+    """
     base_path = 'convocatorias' if 'convocatorias' in url else 'licitaciones'
 
+    # Intento 1: verificación SSL normal con certifi
+    html = None
     try:
-        r = SESSION.get(url, timeout=30, verify=True)
+        import certifi
+        r = SESSION.get(url, timeout=30, verify=certifi.where())
         r.raise_for_status()
         html = r.text
+    except requests.exceptions.SSLError:
+        log.info(f'   ℹ SSL falla con certifi; reintentando sin verificación...')
     except requests.RequestException as e:
         log.warning(f'   ⚠ HTTP error: {e}')
         return []
+    except ImportError:
+        # certifi no disponible — saltamos al fallback
+        pass
+
+    # Intento 2: sin verificación SSL (fallback)
+    if html is None:
+        try:
+            import urllib3
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            r = SESSION.get(url, timeout=30, verify=False)
+            r.raise_for_status()
+            html = r.text
+            log.info(f'   ✓ Conectado sin verificación SSL')
+        except requests.RequestException as e:
+            log.warning(f'   ⚠ HTTP error (incluso sin SSL): {e}')
+            return []
 
     parser = _CafListParser(base_path)
     try:
@@ -932,6 +965,18 @@ def main():
 
     existing: list[dict] = data.get('tenders', [])
     log.info(f'Existentes: {len(existing)} convocatorias')
+
+    # ─── Fix retroactivo: pasar URLs viejas de TED de /en/ a /es/ ───
+    # (Las 693 antiguas se guardaron con /en/notice/. Las migramos in-place
+    # para que al hacer clic se abran en español.)
+    fixed_urls = 0
+    for t in existing:
+        u = t.get('url', '')
+        if 'ted.europa.eu/en/notice/' in u:
+            t['url'] = u.replace('/en/notice/', '/es/notice/')
+            fixed_urls += 1
+    if fixed_urls:
+        log.info(f'🔧 Migradas {fixed_urls} URLs antiguas de TED a español')
 
     all_new: list[Tender] = []
     summary: list[tuple[str, str, int]] = []
