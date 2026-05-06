@@ -42,39 +42,12 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:
 .ptag.sub{font-size:10.5px;padding:4px 11px;border-color:rgba(212,168,67,.35);}
 .ptag.sub.on{border-color:var(--gold);background:rgba(212,168,67,.18);color:var(--gold);}
 
-/* ── TYPE BUTTONS (Open Call / Licitación / Beca) ── */
-.types{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
-.tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:7px;}
-.tbtn:hover{border-color:rgba(255,255,255,.32);background:var(--bg3);}
-.tbtn.on{background:var(--white);color:var(--bg);border-color:var(--white);}
-.tbtn .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.55;}
-.tbtn.on .dot{opacity:1;}
-
 /* ── STATUS BAR ─────────────────────────────── */
 .statusbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;padding:0 2.5rem .9rem;max-width:1360px;margin:0 auto;}
 .status-l{display:flex;align-items:center;gap:.75rem;font-size:12px;color:var(--muted);flex-wrap:wrap;}
 .udot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .countdown{font-size:11px;color:var(--muted);}
 
-/* ── REFRESH BUTTON ─────────────────────────── */
-.btn-refresh{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 14px;
-  border:1px solid var(--bdr);
-  border-radius:20px;
-  background:transparent;
-  color:var(--white);
-  font-size:11px;font-weight:500;
-  cursor:pointer;
-  font-family:inherit;
-  transition:all .15s;
-  flex-shrink:0;
-}
-.btn-refresh:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);}
-.btn-refresh:disabled{opacity:.45;cursor:not-allowed;}
-.btn-refresh .ico{display:inline-block;transition:transform .5s;}
-.btn-refresh.spinning .ico{animation:spin-cont 1s linear infinite;}
-@keyframes spin-cont{to{transform:rotate(360deg);}}
 
 /* ── SEARCH BOX ─────────────────────────────── */
 .status-r{display:flex;align-items:center;gap:8px;}
@@ -123,31 +96,18 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 /* COL 1 — Convocatoria */
 .td-title{font-weight:500;color:var(--white);margin-bottom:5px;line-height:1.4;}
 .td-country{font-size:11.5px;color:var(--muted);margin-top:3px;}
-.td-deadline{font-size:11.5px;color:var(--muted);margin-top:3px;}
-.topic-tag{display:inline-block;font-size:9px;padding:1px 7px;border-radius:20px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle;position:relative;top:-1px;background:#2a2a2a;color:#bdbdbd;}
-/* Etiquetas de temática unificadas — todas en gris neutro.
-   El color queda reservado para "Filtrar por tipo" (Open Call / Licitación / Beca). */
-.b-mobility,.b-transport,.b-training,.b-infrastr,.b-smart,.b-green,.b-other{background:#2a2a2a;color:#bdbdbd;}
 
-/* COL 2 — Fecha */
-.td-date{color:var(--white);font-size:12px;white-space:nowrap;}
+/* COL 2 — Fechas (inicio + fin) */
+.td-dates{white-space:nowrap;}
+.td-date-row{font-size:11.5px;color:var(--white);line-height:1.55;}
+.td-date-row + .td-date-row{margin-top:2px;}
+.lbl-date{color:var(--muted);font-size:10.5px;display:inline-block;min-width:52px;}
 
-/* COL 3 — Entidad + tipo */
+/* COL 3 — Entidad + sub-programa */
 .td-entity{color:var(--white);font-size:12px;margin-bottom:5px;}
 .td-subplatform{color:var(--gold);font-size:10.5px;margin-bottom:5px;letter-spacing:.02em;}
-.type-pill{display:inline-block;font-size:10px;padding:2px 9px;border-radius:20px;font-weight:600;letter-spacing:.03em;}
-.tp-opencall{background:#0e3d28;color:#52d68a;}
-.tp-licitacion{background:#0d2e4a;color:#5aaff0;}
-.tp-concurso{background:#3d2a0a;color:#e0a84a;}
-.tp-beca{background:#2a1a3d;color:#c084fc;}
-.tp-formacion{background:#3d2a0a;color:#e0a84a;}
-.tp-other{background:#2a2a2a;color:#bdbdbd;}
 
-/* COL 4 — Valor */
-.td-budget{color:var(--gold);font-size:12px;font-weight:500;}
-.td-budget.empty{color:var(--muted);}
-
-/* COL 5 — Link */
+/* COL 4 — Link */
 .td-link{text-align:center;}
 .link-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--gold);text-decoration:none;padding:5px 12px;border:1px solid rgba(212,168,67,.4);border-radius:20px;transition:all .15s;white-space:nowrap;}
 .link-btn:hover{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.7);}
@@ -168,8 +128,9 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 @media(max-width:700px){
   .hdr,.statusbar,.results{padding-left:1rem;padding-right:1rem;}
   .hdr h1{font-size:1.3rem;}
-  thead th:nth-child(2),thead th:nth-child(4),
-  tbody td:nth-child(2),tbody td:nth-child(4){display:none;}
+  /* En móvil ocultamos la columna FECHAS (col 2) para no romper layout */
+  thead th:nth-child(2),
+  tbody td:nth-child(2){display:none;}
   .searchbox input{width:130px;}
 }
 </style>
@@ -198,14 +159,6 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
     <div class="platforms" id="subPlatformsList"></div>
   </div>
 
-  <!-- Filtro 2: por tipo de convocatoria -->
-  <div class="filter-label">Filtrar por tipo</div>
-  <div class="types" id="types">
-    <button class="tbtn on" data-c="all">Todas</button>
-    <button class="tbtn" data-c="opencall"><span class="dot" style="background:#52d68a"></span>Convocatorias abiertas</button>
-    <button class="tbtn" data-c="licitacion"><span class="dot" style="background:#5aaff0"></span>Licitaciones</button>
-    <button class="tbtn" data-c="beca"><span class="dot" style="background:#c084fc"></span>Becas y formación</button>
-  </div>
 </div>
 
 <!-- ══ STATUS BAR ═══════════════════════════════ -->
@@ -214,9 +167,6 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
     <span class="udot"></span>
     <span id="lastUpdate">Cargando…</span>
     <span class="countdown" id="countdown"></span>
-    <button class="btn-refresh" id="btnRefresh" title="Recargar datos">
-      <span class="ico">↻</span> Actualizar
-    </button>
   </div>
   <div class="status-r">
     <div class="searchbox">
@@ -244,38 +194,11 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 const DATA_URL    = './data.json';
 const REFRESH_MS  = 60000;          // Auto-recarga del JSON cada minuto
 
-/* ─── MAPS ────────────────────────────────────── */
-const BADGE  = {mobility:'b-mobility',transport:'b-transport',training:'b-training',infrastr:'b-infrastr',smart:'b-smart',green:'b-green',other:'b-other'};
-const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN',infrastr:'INFRAESTRUCTURA',smart:'CIUDAD INTELIGENTE',green:'SOSTENIBILIDAD',other:'OTRA'};
-
 /* ─── STATE ───────────────────────────────────── */
 let allTenders        = [];
-let activeType        = 'all';   // all | opencall | licitacion | beca
 let activePlatform    = 'all';
 let activeSubPlatform = 'all';   // sub-programa dentro de una plataforma
 let sortDir           = 'desc';
-
-/* ─── DETECT CALL TYPE ──────────────────────────
-   Devuelve {l: label visible, c: clase css, k: key para filtrar}
-   k ∈ {'opencall', 'licitacion', 'beca', 'other'}
-   Si t.type viene marcado por el scraper, lo respetamos;
-   si no, hacemos detección por keywords como fallback.       */
-function callType(t) {
-  // Tipo explícito desde el scraper (más fiable)
-  if (t.type === 'beca')       return {l:'Beca / Fellowship', c:'tp-beca',       k:'beca'};
-  if (t.type === 'opencall')   return {l:'Open Call',         c:'tp-opencall',   k:'opencall'};
-  if (t.type === 'licitacion') return {l:'Licitación',        c:'tp-licitacion', k:'licitacion'};
-
-  // Fallback: detectar por contenido
-  const s = (t.title+' '+(t.description||'')+' '+(t.platform||'')).toLowerCase();
-  if (/master school|fellowship|beca|scholarship/i.test(s))  return {l:'Beca / Fellowship', c:'tp-beca',       k:'beca'};
-  if (/open call|call for proposal/i.test(s))                return {l:'Open Call',         c:'tp-opencall',   k:'opencall'};
-  if (/formación|training|master|curso|education/i.test(s))  return {l:'Formación',         c:'tp-formacion',  k:'beca'};
-  if (/suministro|supply|provisión|provision|bus |tren|rolling|procurement/i.test(s)) return {l:'Licitación', c:'tp-licitacion', k:'licitacion'};
-  if (/concurso|competition|prize/i.test(s))                 return {l:'Concurso',          c:'tp-concurso',   k:'licitacion'};
-  if (/horizon|msca|life |cinea|eacea|eit|cef|accelerat/i.test(s)) return {l:'Open Call',   c:'tp-opencall',   k:'opencall'};
-  return {l:'Convocatoria', c:'tp-other', k:'other'};
-}
 
 /* ─── DETECT COUNTRY ──────────────────────────── */
 function country(t) {
@@ -319,62 +242,32 @@ function dateVal(d) {
    En ese caso, además de recargar el JSON, registramos la hora local
    real en localStorage para mostrarla como "última actualización"
    percibida por quien consulta.                                  */
-async function loadData(manual = false) {
-  const btn = document.getElementById('btnRefresh');
+/* ─── LOAD DATA ─────────────────────────────────
+   Carga el JSON. Siempre muestra la hora del último fetch del bot
+   (last_updated del JSON), no la de la persona consultando.       */
+async function loadData() {
   document.getElementById('loader').classList.add('show');
-  if (manual) {
-    btn.disabled = true;
-    btn.classList.add('spinning');
-  }
-
   try {
     const r = await fetch(DATA_URL + '?t=' + Date.now());
     if (!r.ok) throw new Error(r.status);
     const d = await r.json();
 
     // Filtramos las convocatorias cuyo deadline (cierre) ya ha pasado.
-    // Las que no tienen deadline (ej. algunas licitaciones TED) se mantienen.
+    // Las que no tienen deadline se mantienen.
     const today = new Date().toISOString().slice(0, 10);   // 'YYYY-MM-DD'
     allTenders = (d.tenders || []).filter(t => {
-      if (!t.deadline) return true;          // sin cierre → seguir mostrando
-      return t.deadline >= today;            // cierre hoy o futuro → mostrar
+      if (!t.deadline) return true;
+      return t.deadline >= today;
     });
 
-    // Hora a mostrar:
-    // - Si fue una actualización manual → la hora local de AHORA
-    //   (porque la persona acaba de pulsar el botón y se ha
-    //   refrescado la web con los datos del JSON ahora mismo)
-    // - Si fue carga automática → la hora del último fetch del bot
-    if (manual) {
-      const nowIso = new Date().toISOString();
-      try { localStorage.setItem('radareu_last_refresh', nowIso); } catch(_) {}
-      setUpdated(nowIso, true);
-    } else {
-      // En carga automática usamos la última manual del usuario
-      // si existe, sino la del bot (last_updated del JSON)
-      let stored = null;
-      try { stored = localStorage.getItem('radareu_last_refresh'); } catch(_) {}
-      if (stored) setUpdated(stored, true);
-      else        setUpdated(d.last_updated, false);
-    }
-
+    setUpdated(d.last_updated);
     rebuildSubPlatforms();
     render();
-
-    if (manual) {
-      // Brief green flash on the dot
-      const dot = document.querySelector('.udot');
-      dot.style.background = '#3dba7c';
-      dot.style.boxShadow  = '0 0 8px #3dba7c';
-      setTimeout(() => { dot.style.background=''; dot.style.boxShadow=''; }, 1000);
-    }
   } catch(e) {
     document.getElementById('lastUpdate').textContent = '⚠ Error al cargar datos';
     showEmpty('No se pudieron cargar los datos.', 'Comprueba que data.json existe en el repositorio.');
   } finally {
     document.getElementById('loader').classList.remove('show');
-    btn.disabled = false;
-    btn.classList.remove('spinning');
   }
 }
 
@@ -383,12 +276,10 @@ function render() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
   let rows = allTenders.filter(t => {
-    const ct = callType(t);
-    const okType = activeType === 'all' || (t.type ? t.type === activeType : ct.k === activeType);
     const okP    = activePlatform === 'all' || (t.platform||'') === activePlatform;
     const okSub  = activeSubPlatform === 'all' || (t.sub_platform||'') === activeSubPlatform;
-    const okQ    = !q || [t.title, t.platform, t.sub_platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
-    return okType && okP && okSub && okQ;
+    const okQ    = !q || [t.title, t.platform, t.sub_platform, t.description].join(' ').toLowerCase().includes(q);
+    return okP && okSub && okQ;
   });
 
   // ── Sort by date ──────────────────────────────
@@ -414,28 +305,24 @@ function render() {
   const arrowClass = `th-sort ${sortDir}`;
 
   const trs = rows.map((t, i) => {
-    const ct    = callType(t);
     const ctry  = country(t);
-    const badge = BADGE[t.topic]  || 'b-other';
-    const blbl  = BLABEL[t.topic] || 'OTRA';
-    const hasBudget = t.budget && t.budget !== 'null' && t.budget !== 'Variable' && t.budget !== '—';
     const delay = Math.min(i * 18, 400);
+    const dStart = t.date     ? fmtDate(t.date)     : '—';
+    const dEnd   = t.deadline ? fmtDate(t.deadline) : '—';
 
     return `<tr style="animation:fadeUp .22s ease ${delay}ms both">
   <td>
-    <div class="td-title">${esc(t.title)}<span class="topic-tag ${badge}">${blbl}</span></div>
+    <div class="td-title">${esc(t.title)}</div>
     <div class="td-country">${ctry}</div>
-    ${t.deadline ? `<div class="td-deadline">⏳ Cierre: ${fmtDate(t.deadline)}</div>` : ''}
   </td>
-  <td class="td-date">${fmtDate(t.date)}</td>
+  <td class="td-dates">
+    <div class="td-date-row"><span class="lbl-date">📅 Inicio</span> ${dStart}</div>
+    <div class="td-date-row"><span class="lbl-date">⏳ Fin</span> ${dEnd}</div>
+  </td>
   <td>
     <div class="td-entity">${esc(t.platform||'—')}</div>
     ${t.sub_platform ? `<div class="td-subplatform">${esc(t.sub_platform)}</div>` : ''}
-    <span class="type-pill ${ct.c}">${ct.l}</span>
   </td>
-  <td>${hasBudget
-    ? `<span class="td-budget">${esc(t.budget)}</span>`
-    : `<span class="td-budget empty">—</span>`}</td>
   <td class="td-link">${t.url
     ? `<a class="link-btn" href="${esc(t.url)}" target="_blank" rel="noopener">Ver <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
     : '<span style="color:var(--muted2);font-size:11px">—</span>'}</td>
@@ -444,18 +331,17 @@ function render() {
 
   wrap.innerHTML = `<div class="tbl-wrap"><table>
   <colgroup>
-    <col style="width:32%"/><col style="width:10%"/>
-    <col style="width:22%"/><col style="width:14%"/><col style="width:8%"/>
+    <col style="width:42%"/><col style="width:18%"/>
+    <col style="width:30%"/><col style="width:10%"/>
   </colgroup>
   <thead><tr>
-    <th>CONVOCATORIA · PAÍS / UE</th>
+    <th>CONVOCATORIA · PAÍS</th>
     <th>
       <span class="${arrowClass}" id="sortBtn" title="Ordenar por fecha">
-        FECHA DE PUBLICACIÓN <span class="arrow"></span>
+        FECHAS <span class="arrow"></span>
       </span>
     </th>
-    <th>ENTIDAD Y TIPO DE CONVOCATORIA</th>
-    <th>VALOR / FINANCIACIÓN</th>
+    <th>ENTIDAD</th>
     <th style="text-align:center">ENLACE</th>
   </tr></thead>
   <tbody>${trs}</tbody>
@@ -475,16 +361,15 @@ function showEmpty(h, p) {
 }
 
 /* ─── LAST UPDATED ──────────────────────────────
-   manualFlag: si la fecha es de la última pulsación de Actualizar,
-   mostramos también minutos exactos para que se vea "vivo".       */
-function setUpdated(iso, manualFlag) {
+   Muestra la hora del último fetch automático del bot.            */
+function setUpdated(iso) {
   const el = document.getElementById('lastUpdate');
   if (!iso) { el.textContent = 'Sin datos'; return; }
   try {
     const d = new Date(iso);
     const txt = d.toLocaleString('es-ES',
       {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
-    el.textContent = (manualFlag ? 'Actualizado: ' : 'Última búsqueda: ') + txt;
+    el.textContent = 'Última actualización: ' + txt;
   } catch { el.textContent = 'Actualizado'; }
 }
 
@@ -507,14 +392,6 @@ function startCountdown() {
 }
 
 /* ─── EVENTS ──────────────────────────────────── */
-document.getElementById('btnRefresh').addEventListener('click', () => loadData(true));
-
-document.getElementById('types').addEventListener('click', e => {
-  const b = e.target.closest('.tbtn'); if (!b) return;
-  document.querySelectorAll('.tbtn').forEach(x => x.classList.remove('on'));
-  b.classList.add('on'); activeType = b.dataset.c; render();
-});
-
 document.getElementById('platforms').addEventListener('click', e => {
   const b = e.target.closest('.ptag'); if (!b) return;
   // Solo quitar 'on' de los pills del filtro principal (no del sub-filtro)
