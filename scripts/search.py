@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """
-Radar EU — Fetcher gratuito de licitaciones europeas (v4)
+Radar EU — Fetcher gratuito de licitaciones europeas (v6)
 ═══════════════════════════════════════════════════════════════════════════
-Sin API key. Sin coste. Dependencias: requests + feedparser.
+3 fuentes finales (ya validadas con logs reales):
 
-CAMBIOS v4 (vs v3):
-  ✓ TED API v3 corregida → api.ted.europa.eu/v3/notices/search (URL real)
-  ✓ Funding & Tenders ahora usa el RSS oficial (mucho más fiable)
-  ✓ Cada fuente reporta su estado individual: ✅ ok / ⚠️ error / 0 items
-  ✓ Tabla resumen al final del log
-  ✓ Tolerancia a fallos total — una fuente caída no rompe el resto
+  1. TED Search API v3 (api.ted.europa.eu) — licitaciones procurement UE
+  2. EU Funding & Tenders Portal (SEDIA):
+     - 2a: RSS oficial general (estable)
+     - 2b: Endpoint JSON interno (más cobertura, frágil)
+  3. EIT Urban Mobility — scraping HTML de su página de calls
 
-ALCANCE: movilidad, transporte, formación, sostenibilidad, energía,
-         smart cities, medio ambiente.
+Sin API key, sin coste. Dependencias: requests + feedparser.
 """
 
 from __future__ import annotations
@@ -26,6 +24,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 from typing import Iterable, Optional
+from html.parser import HTMLParser
 
 import requests
 import feedparser
@@ -44,77 +43,42 @@ log = logging.getLogger('radar')
 
 
 # ════════════════════════════════════════════════════════════════════════
-# 1. PALABRAS CLAVE — multilingüe
+# 1. PALABRAS CLAVE (filtro de F&T)
 # ════════════════════════════════════════════════════════════════════════
 KEYWORDS = [
     # Transporte y movilidad
-    'transport', 'transporte', 'mobility', 'movilidad', 'mobilité', 'mobilität', 'mobilità',
-    'bus', 'autobús', 'autobus',
-    'rail', 'train', 'tren', 'ferroviario', 'eisenbahn', 'ferrovia',
-    'tram', 'tranvía', 'metro', 'underground', 'subway',
-    'ferry', 'aviation', 'aéreo',
-    'bicycle', 'bike', 'bicicleta', 'cycling', 'ciclismo', 'fahrrad', 'vélo',
-    'logistic', 'logística', 'logistique', 'logistik',
-    'freight', 'cargo', 'mercancías',
-    'ports', 'puerto', 'shipping', 'maritim',
-    'parking', 'estacionamiento',
-    'traffic', 'tráfico', 'congestion', 'congestión',
-    # Energía / sostenibilidad
-    'electric', 'eléctrico', 'electrique', 'elektrisch',
-    'hydrogen', 'hidrógeno', 'hydrogène', 'wasserstoff',
-    'zero emission', 'cero emisión',
-    'clean energy', 'energía limpia',
-    'renewable', 'renovable', 'renouvelable', 'erneuerbar',
-    'photovoltaic', 'solar', 'wind energy', 'eólic',
-    'biofuel', 'biocombustible',
-    'sustainable', 'sostenible', 'durable', 'nachhaltig',
-    'green', 'verde', 'grün',
-    'climate', 'clima',
-    'circular econom', 'economía circular',
-    'decarbon', 'descarboni',
-    'efficiency', 'eficiencia',
-    'environment', 'medio ambiente', 'environnement', 'umwelt',
-    'biodiversity', 'biodiversidad',
-    'pollution', 'contaminación',
+    'transport', 'transporte', 'mobility', 'movilidad', 'mobilité', 'mobilität',
+    'bus', 'autobús', 'rail', 'train', 'tren', 'ferroviario',
+    'tram', 'tranvía', 'metro', 'subway', 'ferry',
+    'bicycle', 'bike', 'cycling', 'logistic', 'logística', 'freight', 'cargo',
+    'puerto', 'shipping', 'aviation',
+    # Energía y sostenibilidad
+    'electric', 'eléctrico', 'hydrogen', 'hidrógeno', 'zero emission',
+    'clean energy', 'renewable', 'photovoltaic', 'solar', 'wind energy',
+    'biofuel', 'sustainable', 'sostenible', 'green', 'verde',
+    'climate', 'clima', 'circular econom', 'decarbon',
+    'environment', 'medio ambiente', 'biodiversity',
     # Smart cities
     'smart city', 'smart cities', 'ciudad inteligente',
-    'smart mob', 'smart transport',
-    'autonomous', 'autónomo',
-    'connected vehicle',
-    'CCAM', 'C-ITS',
-    'MaaS', 'mobility as a service',
-    'IoT', 'internet of things',
-    'digital twin', 'gemelo digital',
-    '5G', 'artificial intelligence', 'inteligencia artificial',
-    'data platform', 'plataforma de datos',
-    'urban', 'urbano',
+    'smart mob', 'autonomous', 'connected vehicle', 'CCAM', 'C-ITS',
+    'MaaS', 'IoT', 'digital twin', 'artificial intelligence',
+    'inteligencia artificial', 'urban', 'urbano',
     # Infraestructuras
-    'infrastructure', 'infraestructura', 'infrastruktur',
-    'road', 'highway', 'carretera', 'autopista',
-    'bridge', 'puente', 'tunnel', 'túnel',
-    'charging', 'recarga', 'recharge',
+    'infrastructure', 'infraestructura', 'road', 'highway', 'carretera',
+    'bridge', 'puente', 'tunnel', 'túnel', 'charging', 'recarga',
     # Formación
-    'training', 'formación', 'formacion', 'formation', 'ausbildung',
-    'education', 'educación', 'éducation', 'bildung',
-    'fellowship', 'scholarship', 'beca', 'bourse', 'stipendium',
-    'master programme', 'doctorate', 'phd', 'doctorado',
-    'erasmus',
-    'capacity building',
-    'vocational',
+    'training', 'formación', 'formation', 'education', 'educación',
+    'fellowship', 'scholarship', 'beca', 'master programme',
+    'doctorate', 'phd', 'erasmus', 'capacity building', 'vocational',
     # Convocatorias
     'open call', 'call for proposal', 'call for tender',
-    'convocatoria', 'licitación', 'licitacion', 'concurso',
-    'tender', 'procurement',
-    'grant', 'funding', 'subvención',
+    'convocatoria', 'licitación', 'concurso', 'tender',
+    'procurement', 'grant', 'funding', 'subvención',
     # Programas UE
-    'CEF', 'connecting europe',
-    'horizon europe', 'horizon-cl', 'msca',
-    'LIFE programme', 'LIFE 20',
-    'eit urban', 'eit climate', 'eit innoenergy',
-    'interreg', 'cohesion fund',
-    'just transition',
+    'CEF', 'connecting europe', 'horizon europe', 'horizon-cl', 'msca',
+    'LIFE programme', 'LIFE 20', 'eit urban', 'eit climate', 'eit innoenergy',
+    'interreg', 'cohesion fund', 'just transition',
 ]
-
 KEYWORDS_RE = re.compile('|'.join(re.escape(k) for k in KEYWORDS), re.IGNORECASE)
 
 
@@ -127,32 +91,26 @@ def matches(text: str) -> bool:
 # ════════════════════════════════════════════════════════════════════════
 def detect_topic(title: str, desc: str = '') -> str:
     s = (title + ' ' + desc).lower()
-    if any(k in s for k in ['training', 'formación', 'formacion', 'education',
-                             'master', 'fellowship', 'beca', 'erasmus', 'eacea',
-                             'scholarship', 'vocational', 'phd', 'doctorate']):
+    if any(k in s for k in ['training', 'formación', 'education', 'master',
+                             'fellowship', 'beca', 'erasmus', 'eacea',
+                             'scholarship', 'vocational', 'phd']):
         return 'training'
-    if any(k in s for k in ['electric', 'hydrogen', 'zero emission', 'eléctric',
-                             'hidrógen', 'clean energy', 'verde', 'green mob',
-                             'sustainable', 'zero-emission', 'renewable',
-                             'solar', 'wind', 'biofuel', 'decarbon',
-                             'circular', 'climate', 'environment', 'biodiv']):
+    if any(k in s for k in ['electric', 'hydrogen', 'zero emission', 'clean energy',
+                             'sustainable', 'renewable', 'solar', 'wind', 'biofuel',
+                             'decarbon', 'circular', 'climate', 'environment']):
         return 'green'
-    if any(k in s for k in ['smart city', 'eit urban', 'eltis', 'maas',
-                             'digital', 'data platform', 'autonomous', 'ccam',
-                             'connected', 'automated mob', 'iot', '5g',
+    if any(k in s for k in ['smart city', 'eit urban', 'maas', 'digital',
+                             'autonomous', 'ccam', 'connected', 'iot',
                              'artificial intelligence', 'digital twin']):
         return 'smart'
-    if any(k in s for k in ['infrastructure', 'infraestructura', 'road',
-                             'highway', 'bridge', 'tunnel', 'carretera', 'cef',
-                             'charging', 'recarga']):
+    if any(k in s for k in ['infrastructure', 'road', 'highway', 'bridge',
+                             'tunnel', 'cef', 'charging']):
         return 'infrastr'
     if any(k in s for k in ['urban mob', 'movilidad urbana', 'cycling',
-                             'pedestrian', 'walking', 'metro', 'tram',
-                             'city transport', 'urban transport']):
+                             'pedestrian', 'metro', 'tram']):
         return 'mobility'
     if any(k in s for k in ['transport', 'bus', 'rail', 'train', 'ferry',
-                             'aviation', 'logistics', 'freight', 'cargo',
-                             'ferroviario', 'transporte']):
+                             'aviation', 'logistics', 'freight']):
         return 'transport'
     return 'other'
 
@@ -164,12 +122,14 @@ def detect_topic(title: str, desc: str = '') -> str:
 class Tender:
     title: str
     url: str
-    platform: str
+    platform: str       # Categoría principal (TED, F&T, EIT UM)
+    sub_platform: str = ''   # Sub-programa (Horizon, CEF, UMX, RAPTOR, …)
     description: str = ''
     date: Optional[str] = None
     deadline: Optional[str] = None
     budget: Optional[str] = None
     topic: str = 'other'
+    type: str = 'other'   # 'opencall' | 'licitacion' | 'beca' | 'other'
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -181,7 +141,7 @@ class Tender:
 # ════════════════════════════════════════════════════════════════════════
 # 4. UTILIDADES
 # ════════════════════════════════════════════════════════════════════════
-USER_AGENT = 'Mozilla/5.0 (compatible; RadarEU-Bot/4.0; +https://github.com/)'
+USER_AGENT = 'Mozilla/5.0 (compatible; RadarEU-Bot/6.0; +https://github.com/)'
 
 SESSION = requests.Session()
 SESSION.headers.update({
@@ -200,7 +160,8 @@ def parse_date(s: str) -> Optional[str]:
         pass
     for fmt in ('%Y-%m-%dT%H:%M:%S%z', '%Y-%m-%dT%H:%M:%SZ',
                 '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S',
-                '%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y'):
+                '%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y',
+                '%d %B %Y', '%d %b %Y'):
         try:
             return datetime.strptime(s[:len(fmt)], fmt).strftime('%Y-%m-%d')
         except Exception:
@@ -217,10 +178,15 @@ def clean(text: str) -> str:
     return re.sub(r'<[^>]+>', '', text or '').strip()
 
 
-def first_lang(obj) -> str:
-    """Extrae el primer texto de un campo multilingüe."""
+# Preferencia de idioma para campos multilingües de TED
+LANG_PREF = ('es', 'spa', 'en', 'eng', 'fr')
+
+
+def first_lang(obj, prefer_spanish: bool = True) -> str:
+    """Extrae texto de un campo multilingüe. Prioriza español si está disponible."""
+    langs = LANG_PREF if prefer_spanish else ('en', 'eng', 'es', 'fr')
     if isinstance(obj, dict):
-        for lg in ('en', 'eng', 'es', 'fr'):
+        for lg in langs:
             v = obj.get(lg)
             if v:
                 return v if isinstance(v, str) else str(v)
@@ -228,160 +194,199 @@ def first_lang(obj) -> str:
             v = next(iter(obj.values()), '')
             return v if isinstance(v, str) else str(v)
     if isinstance(obj, list) and obj:
-        return first_lang(obj[0])
+        return first_lang(obj[0], prefer_spanish)
     return str(obj or '')
 
 
 # ════════════════════════════════════════════════════════════════════════
-# 5. FETCHER GENÉRICO RSS
+# 5. TED Search API v3 — solo SERVICIOS (no suministros ni obras)
 # ════════════════════════════════════════════════════════════════════════
-def fetch_rss(platform: str, url: str, filter_by_keyword: bool = True) -> list[Tender]:
-    """Descarga un feed RSS/Atom y devuelve los items relevantes."""
-    log.info(f'📡 {platform:24} ← {url[:65]}')
-    try:
-        parsed = feedparser.parse(url, agent=USER_AGENT,
-                                  request_headers={'Accept-Language': 'en'})
-    except Exception as e:
-        log.error(f'   ❌ {platform}: {e}')
-        return []
-
-    if parsed.bozo and not parsed.entries:
-        log.warning(f'   ⚠ feed inválido o vacío')
-        return []
-
-    out: list[Tender] = []
-    for e in parsed.entries:
-        title = clean(getattr(e, 'title', ''))
-        desc  = clean(getattr(e, 'summary', '') or getattr(e, 'description', ''))
-        link  = getattr(e, 'link', '')
-        date  = (parse_date(getattr(e, 'published', '')) or
-                 parse_date(getattr(e, 'updated', '')))
-
-        if not title:
-            continue
-        if filter_by_keyword and not matches(title + ' ' + desc):
-            continue
-
-        out.append(Tender(
-            title=title[:240],
-            url=link,
-            platform=platform,
-            description=desc[:280],
-            date=date,
-            topic=detect_topic(title, desc),
-        ))
-    log.info(f'   → {len(out)} resultados')
-    return out
-
-
-# ════════════════════════════════════════════════════════════════════════
-# 6. TED API v3 — JSON oficial (URL CORREGIDA)
-# ════════════════════════════════════════════════════════════════════════
+# Los CPVs (Common Procurement Vocabulary) tienen 8 dígitos + 1 dígito de control.
+# La API se consulta sin el dígito de control (sin "-9", "-3", etc).
+#
+# Filtramos solo SERVICIOS para que las licitaciones traigan estudios,
+# consultorías, asistencia técnica, formación, etc. (NO buses, NI obras).
 TED_CPVS = [
-    '60100000',  # Servicios transporte por carretera
-    '34110000',  # Vehículos de motor
-    '34121000',  # Autobuses y autocares
-    '34622000',  # Vehículos ferroviarios
-    '60200000',  # Servicios transporte ferroviario
-    '63110000',  # Carga y descarga / logística
+    # ── Transporte y logística (60-63) ────────────────────────────────
+    '60100000',  # Servicios de transporte por carretera
+    '60200000',  # Servicios de transporte ferroviario
+    '60400000',  # Servicios de transporte aéreo
+    '60600000',  # Servicios de transporte marítimo / fluvial
+    '63000000',  # Servicios anexos al transporte (logística)
+    '63100000',  # Servicios de carga, descarga y almacenamiento
+
+    # ── Ingeniería, urbanismo y consultoría técnica (71) ──────────────
+    '71241000',  # Estudios de viabilidad, servicios de asesoramiento, análisis
     '71300000',  # Servicios de ingeniería
-    '45230000',  # Construcción carreteras / vías férreas
-    '09310000',  # Electricidad
+    '71311200',  # Servicios de consultoría en sistemas de transporte
+    '71311210',  # Servicios de consultoría en materia de carreteras
+    '71311220',  # Servicios de ingeniería de tráfico
+    '71356000',  # Servicios técnicos
+    '71356100',  # Servicios de control técnico
+    '71356200',  # Servicios de asistencia técnica
+    '71400000',  # Servicios de planificación urbana y arquitectura paisajística
+    '71410000',  # Servicios de urbanismo / planificación urbana
+    '71600000',  # Servicios técnicos de ensayo, análisis y consultoría
+    '71800000',  # Servicios de consultoría para abastecimiento de agua y residuos
+
+    # ── Tecnologías de la Información y datos (72) ────────────────────
+    '72000000',  # Servicios TIC: consultoría, desarrollo, instalación
+    '72224000',  # Servicios de consultoría en gestión de proyectos
+    '72310000',  # Servicios de tratamiento de datos
+
+    # ── Investigación y desarrollo (73) ───────────────────────────────
+    '73000000',  # Servicios de I+D y servicios de consultoría conexos
+    '73110000',  # Servicios de investigación
+    '73100000',  # Servicios de investigación y desarrollo experimental
+    '73200000',  # Servicios de consultoría en investigación y desarrollo
+
+    # ── Servicios jurídicos y gestión (79) ────────────────────────────
+    '79100000',  # Servicios jurídicos
+    '79111000',  # Servicios de asesoría jurídica
+    '79140000',  # Servicios de asesoría e información jurídica
+    '79400000',  # Servicios de consultoría comercial y de gestión
+    '79410000',  # Servicios de consultoría en gestión empresarial
+    '79411000',  # Servicios generales de consultoría en gestión
+    '79421000',  # Servicios de gestión de proyectos
+    '79900000',  # Servicios empresariales diversos
+
+    # ── Educación y formación (80) ────────────────────────────────────
+    '80000000',  # Servicios de educación y formación
     '80500000',  # Servicios de formación
-    '80520000',  # Instalaciones formación
-    '73000000',  # I+D
+    '80520000',  # Instalaciones de formación
+    '80540000',  # Servicios de formación medioambiental
+
+    # ── Medio ambiente y sostenibilidad (90) ──────────────────────────
+    '90000000',  # Servicios de saneamiento, medio ambiente
     '90700000',  # Servicios medioambientales
+    '90710000',  # Gestión medioambiental
+    '90711000',  # Evaluación de impacto medioambiental
+    '90712000',  # Planificación medioambiental
+    '90713000',  # Servicios de asesoramiento / consultoría en asuntos ambientales
+    '90720000',  # Protección del medio ambiente
 ]
 
 
 def fetch_ted() -> list[Tender]:
-    """
-    TED Search API v3.
-    Endpoint correcto: api.ted.europa.eu/v3/notices/search
-    Sintaxis de query: expert search (NC, TD, etc.)
-    """
-    log.info('🇪🇺 TED API v3')
-
-    # Construimos query con sintaxis expert-search.
-    # Query: solo CPVs que nos interesan, en notices ACTIVE (no expirados)
+    log.info(f'🇪🇺 TED Search API v3 (solo SERVICIOS, {len(TED_CPVS)} CPVs)')
     cpv_query = ' OR '.join(f'classification-cpv={c}' for c in TED_CPVS)
+    # NC=services es la sintaxis "expert search" de TED para "Nature of Contract = Services"
+    # (excluye Supplies y Works automáticamente)
+    full_query = f'({cpv_query}) AND contract-nature=services'
 
-    payload = {
-        'query':            cpv_query,
-        'fields':           ['publication-number', 'notice-title', 'publication-date',
-                             'buyer-name', 'links'],
-        'limit':            100,
-        'page':             1,
-        'scope':            'ACTIVE',
-        'checkQuerySyntax': False,
-        'paginationMode':   'PAGE_NUMBER',
-    }
-
-    try:
-        r = SESSION.post(
-            'https://api.ted.europa.eu/v3/notices/search',
-            json=payload, timeout=45,
-            headers={'Accept': '*/*', 'Content-Type': 'application/json'},
-        )
-        r.raise_for_status()
-        data = r.json()
-    except requests.HTTPError as e:
-        # Intentamos leer el body de error para diagnóstico
-        try:
-            err_body = r.text[:300] if r else ''
-        except Exception:
-            err_body = ''
-        log.warning(f'   ⚠ TED HTTP {e.response.status_code}: {err_body[:200]}')
-        return []
-    except (requests.RequestException, ValueError) as e:
-        log.warning(f'   ⚠ TED error: {e}')
-        return []
-
-    notices = data.get('notices') or data.get('results') or []
-    log.info(f'   → {len(notices)} avisos brutos')
+    # Paginación: TED admite hasta 250 por página. Pedimos hasta 3 páginas
+    # (750 items máx) para cubrir el aumento de CPVs.
+    PAGE_SIZE = 250
+    MAX_PAGES = 3
 
     out: list[Tender] = []
-    for n in notices:
-        title = clean(first_lang(n.get('notice-title') or n.get('title')))[:240]
-        if not title:
-            continue
+    for page in range(1, MAX_PAGES + 1):
+        payload = {
+            'query':            full_query,
+            'fields':           ['publication-number', 'notice-title',
+                                 'publication-date', 'buyer-name',
+                                 'buyer-country', 'links'],
+            'limit':            PAGE_SIZE,
+            'page':             page,
+            'scope':            'ACTIVE',
+            'checkQuerySyntax': False,
+            'paginationMode':   'PAGE_NUMBER',
+        }
+        try:
+            r = SESSION.post(
+                'https://api.ted.europa.eu/v3/notices/search',
+                json=payload, timeout=45,
+                headers={'Accept': '*/*', 'Content-Type': 'application/json'},
+            )
+            r.raise_for_status()
+            data = r.json()
+        except (requests.RequestException, ValueError) as e:
+            log.warning(f'   ⚠ TED página {page}: {e}')
+            break
 
-        pubn = n.get('publication-number', '')
-        # El link puede venir en distintas formas
-        links = n.get('links') or {}
-        if isinstance(links, dict):
-            link = (links.get('html') or {}).get('en') or links.get('en') or ''
-        else:
-            link = ''
-        if not link and pubn:
-            link = f'https://ted.europa.eu/en/notice/-/detail/{pubn}'
+        notices = data.get('notices') or data.get('results') or []
+        log.info(f'   página {page}: {len(notices)} avisos brutos')
 
-        buyer = clean(first_lang(n.get('buyer-name')))
-        desc  = f'Comprador: {buyer}' if buyer else ''
+        for n in notices:
+            t = _ted_notice_to_tender(n)
+            if t:
+                out.append(t)
 
-        out.append(Tender(
-            title=f'TED — {title}',
-            url=link,
-            platform='TED / SIMAP',
-            description=desc[:280],
-            date=parse_date(n.get('publication-date', '')),
-            topic=detect_topic(title, desc),
-        ))
-    log.info(f'   → {len(out)} licitaciones procesadas')
+        # Si la página vino con menos de PAGE_SIZE, ya no hay más
+        if len(notices) < PAGE_SIZE:
+            break
+
+    log.info(f'   → {len(out)} licitaciones totales (todas las páginas)')
     return out
 
 
-# ════════════════════════════════════════════════════════════════════════
-# 7. EU FUNDING & TENDERS PORTAL — RSS oficial
-# ════════════════════════════════════════════════════════════════════════
-def fetch_funding_tenders() -> list[Tender]:
-    """
-    Usa el RSS oficial de Funding & Tenders Portal.
-    URL confirmada: ec.europa.eu/info/funding-tenders/.../grantTenders-rss.xml
-    """
-    log.info('💶 EU Funding & Tenders Portal (RSS oficial)')
-    url = 'https://ec.europa.eu/info/funding-tenders/opportunities/data/referenceData/grantTenders-rss.xml'
+def _ted_notice_to_tender(n: dict) -> Optional[Tender]:
+    """Convierte un aviso bruto de TED en un Tender. Devuelve None si inválido."""
+    title = clean(first_lang(n.get('notice-title') or n.get('title')))[:240]
+    if not title:
+        return None
+    pubn = n.get('publication-number', '')
+    links = n.get('links') or {}
+    if isinstance(links, dict):
+        # Preferimos español si está disponible
+        html_links = links.get('html') or {}
+        link = (html_links.get('es') or html_links.get('en') or
+                links.get('es') or links.get('en') or '')
+    else:
+        link = ''
+    if not link and pubn:
+        link = f'https://ted.europa.eu/es/notice/-/detail/{pubn}'
+    buyer = clean(first_lang(n.get('buyer-name')))
+    country = clean(first_lang(n.get('buyer-country')))
+    desc_parts = []
+    if buyer:   desc_parts.append(f'Comprador: {buyer}')
+    if country: desc_parts.append(country)
+    desc = ' · '.join(desc_parts)
 
+    return Tender(
+        title=f'TED — {title}',
+        url=link,
+        platform='Tenders Electronic Daily (TED · DOUE Serie S)',
+        sub_platform='TED',
+        description=desc[:280],
+        date=parse_date(n.get('publication-date', '')),
+        topic=detect_topic(title, desc),
+        type='licitacion',
+    )
+
+
+# ════════════════════════════════════════════════════════════════════════
+# 6. F&T Portal — RSS oficial (Plan A, estable)
+# ════════════════════════════════════════════════════════════════════════
+PROGRAM_MAP = {
+    'HORIZON': ('Horizon Europe (HE)',                              'opencall'),
+    'LIFE':    ('Programa de Medio Ambiente y Clima (LIFE)',         'opencall'),
+    'CEF':     ('Mecanismo Conectar Europa – Transporte (CEF Transport)', 'opencall'),
+    'CEF2':    ('Mecanismo Conectar Europa – Transporte (CEF Transport)', 'opencall'),
+    'CEFDIG':  ('Mecanismo Conectar Europa – Digital (CEF Digital)', 'opencall'),
+    'ERASMUS': ('Erasmus+ (gestionado por EACEA)',                   'beca'),
+    'EAC':     ('Erasmus+ (gestionado por EACEA)',                   'beca'),
+    'CREA':    ('Europa Creativa (Creative Europe)',                 'opencall'),
+    'CERV':    ('Ciudadanos, Igualdad, Derechos y Valores (CERV)',   'opencall'),
+    'EU4H':    ('Programa UE por la Salud (EU4Health)',              'opencall'),
+    'DIGITAL': ('Europa Digital (Digital Europe)',                   'opencall'),
+    'EUI':     ('Iniciativa Urbana Europea (EUI)',                   'opencall'),
+    'EITHE':   ('Instituto Europeo de Innovación y Tecnología (EIT)','opencall'),
+    'EIT':     ('Instituto Europeo de Innovación y Tecnología (EIT)','opencall'),
+    'IF':      ('Fondo de Innovación (Innovation Fund)',             'opencall'),
+    'INTERREG':('Cooperación Territorial Europea (Interreg Europe)', 'opencall'),
+    'MSCA':    ('Acciones Marie Skłodowska-Curie (MSCA)',           'beca'),
+}
+
+
+def map_program(prog: str) -> tuple[str, str]:
+    """Devuelve (sub_platform, type) según programCode."""
+    return PROGRAM_MAP.get(prog.upper(), (f'EU Funding & Tenders ({prog})', 'opencall'))
+
+
+def fetch_funding_tenders_rss() -> list[Tender]:
+    log.info('💶 F&T Portal · RSS oficial (Plan A)')
+    url = 'https://ec.europa.eu/info/funding-tenders/opportunities/data/referenceData/grantTenders-rss.xml'
     try:
         parsed = feedparser.parse(url, agent=USER_AGENT)
     except Exception as e:
@@ -389,7 +394,7 @@ def fetch_funding_tenders() -> list[Tender]:
         return []
 
     if parsed.bozo and not parsed.entries:
-        log.warning(f'   ⚠ feed vacío o inválido')
+        log.warning(f'   ⚠ feed inválido')
         return []
 
     out: list[Tender] = []
@@ -397,66 +402,505 @@ def fetch_funding_tenders() -> list[Tender]:
         title = clean(getattr(e, 'title', ''))
         desc  = clean(getattr(e, 'summary', '') or getattr(e, 'description', ''))
         link  = getattr(e, 'link', '')
-
         if not title or not matches(title + ' ' + desc):
             continue
 
-        # El RSS pone el deadline dentro del HTML de la descripción
-        # Ejemplo: "Deadline: Thu, 28 Nov 2024 17:00:00 (Brussels local time)"
+        # Deadline en HTML del summary
         deadline = None
-        m = re.search(r'Deadline[^:]*:\s*([^<]+?)(?:\s*\(|<|$)', desc, re.IGNORECASE)
+        m = re.search(r'Deadline[^:]*:\s*([^<\n]+?)(?:\s*\(|<|$)', desc, re.IGNORECASE)
         if m:
             deadline = parse_date(m.group(1))
 
-        # Programa detectado por el callCode/programCode en la URL
         prog = 'EU'
-        m_prog = re.search(r'programCode=(\w+)', link)
+        m_prog = re.search(r'programCode=([A-Z0-9]+)', link)
         if m_prog:
             prog = m_prog.group(1)
-
-        platform_name = ('Horizon Europe' if prog == 'HORIZON'
-                         else 'LIFE' if prog == 'LIFE'
-                         else 'CEF Transport' if prog in ('CEF', 'CEF2')
-                         else 'EACEA' if prog in ('ERASMUS', 'EAC', 'CREA')
-                         else 'EU Funding & Tenders Portal')
+        sub, type_ = map_program(prog)
 
         out.append(Tender(
             title=title[:240],
             url=link,
-            platform=platform_name,
-            description=clean(desc)[:280],
+            platform='Portal de Financiación y Licitaciones de la UE (F&T Portal · SEDIA)',
+            sub_platform=sub,
+            description=desc[:280],
             date=parse_date(getattr(e, 'published', '')),
             deadline=deadline,
             topic=detect_topic(title, desc),
+            type=type_,
+        ))
+    log.info(f'   → {len(out)} convocatorias (RSS)')
+    return out
+
+
+# ════════════════════════════════════════════════════════════════════════
+# 7. F&T Portal — SEDIA Search API (Plan B, frágil)
+# ════════════════════════════════════════════════════════════════════════
+def fetch_funding_tenders_api() -> list[Tender]:
+    """
+    Endpoint SEDIA: api.tech.ec.europa.eu/search-api/prod/rest/search
+    Documentado en proyectos open-source (Apify, etc.). Sin clave.
+    Si falla, simplemente devuelve [] sin romper.
+    """
+    log.info('💶 F&T Portal · SEDIA API (Plan B)')
+
+    # Probamos varias variantes de payload — diferentes scrapers documentan
+    # formatos ligeramente distintos. Cogemos el primero que funcione.
+    base = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search'
+
+    # Form variant — el endpoint admite formdata
+    form_payload = {
+        'apiKey': 'SEDIA',
+        'text':   '***',
+        'pageSize': '100',
+        'pageNumber': '1',
+    }
+    body = {
+        'bool': {
+            'must': [{
+                'terms': {
+                    'type': ['1', '2'],   # 1=Topic, 2=Tender
+                },
+            }, {
+                'terms': {
+                    'status': ['31094501', '31094502'],   # Forthcoming + Open
+                },
+            }],
+        },
+        'sort': {'field': 'sortStatus', 'order': 'ASC'},
+    }
+
+    out: list[Tender] = []
+    try:
+        r = SESSION.post(
+            base,
+            params=form_payload,
+            data={'query': json.dumps(body), 'languages': '["en"]'},
+            timeout=45,
+            headers={'Accept': 'application/json'},
+        )
+        if r.status_code != 200:
+            log.warning(f'   ⚠ SEDIA HTTP {r.status_code}: {r.text[:150]}')
+            return []
+        data = r.json()
+    except (requests.RequestException, ValueError) as e:
+        log.warning(f'   ⚠ SEDIA error: {e}')
+        return []
+
+    results = data.get('results') or []
+    log.info(f'   → {len(results)} resultados brutos del SEDIA')
+
+    for r_ in results:
+        meta = r_.get('metadata') or {}
+
+        # Extraer título — puede estar en distintos campos según el tipo
+        title = (clean(first_lang(r_.get('content') or '')) or
+                 clean(first_lang(meta.get('title')))).strip()
+        if isinstance(title, list) and title:
+            title = title[0]
+        title = str(title)[:240]
+        if not title:
+            continue
+
+        # Identificador y URL
+        ident = first_lang(meta.get('identifier') or '')
+        if isinstance(ident, list) and ident:
+            ident = ident[0]
+        ident = str(ident).strip()
+        url = (f'https://ec.europa.eu/info/funding-tenders/opportunities/'
+               f'portal/screen/opportunities/topic-details/{ident.lower()}'
+               if ident else r_.get('url') or '')
+
+        # Programa
+        prog_raw = meta.get('frameworkProgramme') or meta.get('callProgramme') or 'EU'
+        if isinstance(prog_raw, list) and prog_raw:
+            prog_raw = prog_raw[0]
+        prog = str(prog_raw).strip().upper()
+        sub, type_ = map_program(prog)
+
+        # Fechas
+        opening = first_lang(meta.get('plannedOpeningDate')) or \
+                  first_lang(meta.get('startDate'))
+        deadline_raw = first_lang(meta.get('deadlineDate'))
+        if isinstance(deadline_raw, list) and deadline_raw:
+            deadline_raw = deadline_raw[0]
+
+        out.append(Tender(
+            title=title,
+            url=url,
+            platform='Portal de Financiación y Licitaciones de la UE (F&T Portal · SEDIA)',
+            sub_platform=sub,
+            description=f'Programa: {prog}. ID: {ident}'[:280],
+            date=parse_date(str(opening)),
+            deadline=parse_date(str(deadline_raw)),
+            topic=detect_topic(title, ''),
+            type=type_,
         ))
     log.info(f'   → {len(out)} convocatorias filtradas')
     return out
 
 
 # ════════════════════════════════════════════════════════════════════════
-# 8. CATÁLOGO DE FUENTES RSS
+# 8. EIT Urban Mobility — scraping HTML de la página de calls
 # ════════════════════════════════════════════════════════════════════════
-RSS_SOURCES = [
-    ('EIT Urban Mobility',  'https://www.eiturbanmobility.eu/feed/'),
-    ('Eltis',               'https://www.eltis.org/newsroom/rss'),
-    ('CINEA',               'https://cinea.ec.europa.eu/news-events/news_en.rss'),
-    ('EACEA',               'https://www.eacea.ec.europa.eu/news-events/news_en.rss'),
-    ('Horizon Europe',      'https://cordis.europa.eu/news/rss/?lang=en'),
-    ('POLIS Network',       'https://www.polisnetwork.eu/feed/'),
-    ('UITP',                'https://www.uitp.org/feed/'),
-    ('Global Mass Transit', 'https://globalmasstransit.net/feed/'),
-    ('ICLEI Europe',        'https://iclei-europe.org/news/?tx_news_pi1[action]=rss'),
-]
+class _EitCallsParser(HTMLParser):
+    """
+    Parser de la página /join-us/call-for-proposals/.
+    Cada call sigue el patrón:
+      "Open call" ó "Closed call"
+      "DEADLINE: <fecha>"
+      <h*>Título</h*>
+      <p>Descripción</p>
+      <a href="…">VIEW MORE</a>
+
+    Usamos máquina de estados sencilla recorriendo el flujo de texto y enlaces.
+    """
+    def __init__(self):
+        super().__init__()
+        self.calls: list[dict] = []
+        self._current: dict = {}
+        self._capture = None         # qué estamos capturando ahora
+        self._last_link: str = ''
+        self._href_pending: str = ''
+        self._buffer: list[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs_d = dict(attrs)
+        # Nuevo enlace candidato
+        if tag == 'a':
+            href = attrs_d.get('href', '')
+            if '/call-for-proposals/' in href and href.endswith('/'):
+                self._href_pending = href
+        # Headings → posibles títulos
+        if tag in ('h2', 'h3', 'h4'):
+            self._buffer = []
+            self._capture = 'title'
+
+    def handle_endtag(self, tag):
+        if self._capture == 'title' and tag in ('h2', 'h3', 'h4'):
+            title = ' '.join(self._buffer).strip()
+            if title and self._current.get('status'):
+                self._current['title'] = title
+            self._buffer = []
+            self._capture = None
+        if tag == 'a' and self._href_pending and self._current.get('title') and 'url' not in self._current:
+            self._current['url'] = self._href_pending
+            self._href_pending = ''
+            # Cerrar la call actual y guardar
+            if self._current.get('title') and self._current.get('url'):
+                self.calls.append(self._current.copy())
+            self._current = {}
+
+    def handle_data(self, data):
+        text = data.strip()
+        if not text:
+            return
+
+        # Detectar inicio de bloque por marcador "Open call" / "Closed call"
+        low = text.lower()
+        if low in ('open call', 'closed call'):
+            self._current = {'status': 'open' if low == 'open call' else 'closed'}
+            return
+
+        # Deadline
+        m = re.match(r'DEADLINE:\s*(.+)', text, re.IGNORECASE)
+        if m and self._current:
+            self._current['deadline'] = m.group(1).strip()
+            return
+
+        # Título acumulado
+        if self._capture == 'title':
+            self._buffer.append(text)
+            return
+
+        # Descripción: si hay current con título pero sin descripción todavía
+        if self._current.get('title') and 'desc' not in self._current and len(text) > 30:
+            self._current['desc'] = text[:280]
+
+
+def fetch_eit_urban_mobility() -> list[Tender]:
+    log.info('🚲 EIT Urban Mobility · scraping calls page')
+    url = 'https://www.eiturbanmobility.eu/join-us/call-for-proposals/'
+
+    try:
+        r = SESSION.get(url, timeout=30)
+        r.raise_for_status()
+        html = r.text
+    except requests.RequestException as e:
+        log.warning(f'   ⚠ HTTP error: {e}')
+        return []
+
+    parser = _EitCallsParser()
+    try:
+        parser.feed(html)
+    except Exception as e:
+        log.warning(f'   ⚠ Parse error: {e}')
+        return []
+
+    calls = parser.calls
+    log.info(f'   → {len(calls)} bloques detectados')
+
+    # Filtrar solo OPEN calls
+    open_calls = [c for c in calls if c.get('status') == 'open']
+    log.info(f'   → {len(open_calls)} OPEN calls')
+
+    out: list[Tender] = []
+    for c in open_calls:
+        title = c.get('title', '').strip()
+        if not title:
+            continue
+
+        # Detectar sub-programa por keywords del título
+        title_l = title.lower()
+        if 'umx' in title_l or 'urban mobility explained' in title_l:
+            sub = 'Urban Mobility Explained (UMX)'
+        elif 'raptor' in title_l:
+            sub = 'Rapid Applications for Transport (RAPTOR)'
+        elif 'segs' in title_l or 'student entrepreneur' in title_l:
+            sub = 'Student Entrepreneur Grant Scheme (SEGS)'
+        elif 'strategic innovation' in title_l:
+            sub = 'Convocatoria de Innovación Estratégica (Strategic Innovation)'
+        elif 'edtech' in title_l:
+            sub = 'EdTech Conference Open Call'
+        elif 'scaleup' in title_l:
+            sub = 'Iniciativa de Promoción de Scaleups (Scaleup Promotion)'
+        elif 'master school' in title_l or 'fellowship' in title_l:
+            sub = 'Master School & Fellowship'
+        elif 'flagship accelerator' in title_l:
+            sub = 'Aceleradora Insignia (Flagship Accelerator)'
+        elif 'sme market' in title_l:
+            sub = 'Expansión de Mercado para PyMEs (SME Market Expansion)'
+        elif 'citizens on the move' in title_l:
+            sub = 'Citizens on the Move'
+        elif 'startup' in title_l:
+            sub = 'Programa de Apoyo a Startups'
+        elif 'ris' in title_l:
+            sub = 'Esquema Regional de Innovación (RIS)'
+        else:
+            sub = 'Otras convocatorias abiertas'
+
+        # Tipo: si es formación/Master/PhD → beca, sino opencall
+        type_ = 'beca' if any(k in title_l for k in
+                              ['master', 'fellowship', 'phd', 'student', 'school',
+                               'edtech', 'citizens']) else 'opencall'
+
+        out.append(Tender(
+            title=title[:240],
+            url=c.get('url') or url,
+            platform='Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)',
+            sub_platform=sub,
+            description=c.get('desc', '')[:280],
+            deadline=parse_date(c.get('deadline', '')),
+            topic=detect_topic(title, c.get('desc', '')),
+            type=type_,
+        ))
+
+    log.info(f'   → {len(out)} EIT UM calls procesadas')
+    return out
 
 
 # ════════════════════════════════════════════════════════════════════════
-# 9. MERGE SIN DUPLICADOS
+# 8b. CAF — Banco de Desarrollo de América Latina y el Caribe
+# ════════════════════════════════════════════════════════════════════════
+# CAF publica DOS listas separadas:
+#   - Convocatorias abiertas (research grants, expresiones de interés, etc.)
+#     URL: /es/trabaja-con-nosotros/convocatorias/?enrollment=open
+#   - Licitaciones abiertas (procurement de servicios consultoría)
+#     URL: /es/trabaja-con-nosotros/licitaciones/?status=open
+#
+# Cada item de la lista enlaza a una página de detalle con título,
+# descripción, fechas y país. El listado HTML usa cards con clases
+# CSS estables — parseamos con HTMLParser custom igual que EIT UM.
+
+class _CafListParser(HTMLParser):
+    """
+    Parser de las páginas /convocatorias/ y /licitaciones/ de CAF.
+    Cada item viene como card con:
+      <a href="/es/trabaja-con-nosotros/{convocatorias|licitaciones}/{slug}/">
+        <h3 o div con título>
+        <p o span con país/descripción/fecha>
+      </a>
+    """
+    def __init__(self, base_path: str):
+        super().__init__()
+        self.base_path = base_path  # 'convocatorias' o 'licitaciones'
+        self.items: list[dict] = []
+        self._current: dict = {}
+        self._capture_title = False
+        self._capture_text = False
+        self._buffer: list[str] = []
+        self._inside_item_link = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs_d = dict(attrs)
+
+        # Detectar enlace a una convocatoria/licitación específica
+        if tag == 'a':
+            href = attrs_d.get('href', '')
+            # Solo URLs que apuntan a un slug específico (no a la lista misma)
+            if (f'/trabaja-con-nosotros/{self.base_path}/' in href
+                    and href.rstrip('/').endswith('/') is False
+                    and not href.endswith(f'{self.base_path}/')):
+                # Es enlace a item individual (no a la lista padre)
+                self._inside_item_link = True
+                self._current = {'url': href if href.startswith('http')
+                                 else f'https://www.caf.com{href}'}
+
+        # Headings dentro del enlace → título
+        if self._inside_item_link and tag in ('h2', 'h3', 'h4', 'h5'):
+            self._capture_title = True
+            self._buffer = []
+
+        # Otros bloques de texto dentro del enlace → posible país/desc/fecha
+        if self._inside_item_link and tag in ('p', 'span', 'div', 'time'):
+            self._capture_text = True
+
+    def handle_endtag(self, tag):
+        if self._capture_title and tag in ('h2', 'h3', 'h4', 'h5'):
+            title = ' '.join(self._buffer).strip()
+            if title and self._inside_item_link:
+                self._current['title'] = title
+            self._buffer = []
+            self._capture_title = False
+
+        if tag == 'a' and self._inside_item_link:
+            # Cerrar item
+            if self._current.get('title') and self._current.get('url'):
+                self.items.append(self._current.copy())
+            self._current = {}
+            self._inside_item_link = False
+            self._capture_text = False
+
+    def handle_data(self, data):
+        text = data.strip()
+        if not text:
+            return
+
+        if self._capture_title:
+            self._buffer.append(text)
+            return
+
+        if self._inside_item_link and self._current.get('title'):
+            # Acumular descripción/país hasta cerrar el enlace
+            existing = self._current.get('desc', '')
+            if len(existing) < 280:
+                self._current['desc'] = (existing + ' ' + text).strip()[:280]
+
+
+def _detect_caf_country(text: str) -> str:
+    """Detecta país latinoamericano en el texto."""
+    t = text.lower()
+    countries = [
+        ('argentina', '🇦🇷 Argentina'), ('bolivia', '🇧🇴 Bolivia'),
+        ('brasil', '🇧🇷 Brasil'), ('brazil', '🇧🇷 Brasil'),
+        ('chile', '🇨🇱 Chile'), ('colombia', '🇨🇴 Colombia'),
+        ('costa rica', '🇨🇷 Costa Rica'), ('cuba', '🇨🇺 Cuba'),
+        ('ecuador', '🇪🇨 Ecuador'), ('el salvador', '🇸🇻 El Salvador'),
+        ('guatemala', '🇬🇹 Guatemala'), ('honduras', '🇭🇳 Honduras'),
+        ('méxico', '🇲🇽 México'), ('mexico', '🇲🇽 México'),
+        ('nicaragua', '🇳🇮 Nicaragua'), ('panamá', '🇵🇦 Panamá'),
+        ('panama', '🇵🇦 Panamá'), ('paraguay', '🇵🇾 Paraguay'),
+        ('perú', '🇵🇪 Perú'), ('peru', '🇵🇪 Perú'),
+        ('república dominicana', '🇩🇴 R. Dominicana'),
+        ('uruguay', '🇺🇾 Uruguay'), ('venezuela', '🇻🇪 Venezuela'),
+        ('caribe', '🌎 Caribe'),
+        ('regional', '🌎 Regional LATAM'),
+        ('américa latina', '🌎 Regional LATAM'),
+    ]
+    for needle, flag in countries:
+        if needle in t:
+            return flag
+    return '🌎 Regional LATAM'
+
+
+def _fetch_caf_url(url: str, sub_platform: str, type_: str) -> list[Tender]:
+    """Scrapea una URL de CAF (convocatorias o licitaciones)."""
+    base_path = 'convocatorias' if 'convocatorias' in url else 'licitaciones'
+
+    try:
+        r = SESSION.get(url, timeout=30, verify=True)
+        r.raise_for_status()
+        html = r.text
+    except requests.RequestException as e:
+        log.warning(f'   ⚠ HTTP error: {e}')
+        return []
+
+    parser = _CafListParser(base_path)
+    try:
+        parser.feed(html)
+    except Exception as e:
+        log.warning(f'   ⚠ Parse error: {e}')
+        return []
+
+    log.info(f'   → {len(parser.items)} items detectados en {sub_platform}')
+
+    out: list[Tender] = []
+    seen_urls = set()
+    for item in parser.items:
+        title = item.get('title', '').strip()
+        item_url = item.get('url', '').strip()
+
+        if not title or not item_url:
+            continue
+        if item_url in seen_urls:
+            continue
+        seen_urls.add(item_url)
+
+        desc = item.get('desc', '').strip()
+        country = _detect_caf_country(title + ' ' + desc)
+
+        # Construir descripción final
+        full_desc = country
+        if desc and desc != title:
+            # Limpiar descripción de duplicados con el título
+            clean_desc = desc.replace(title, '').strip(' .·-')
+            if clean_desc:
+                full_desc = f'{country} · {clean_desc}'
+
+        out.append(Tender(
+            title=title[:240],
+            url=item_url,
+            platform='Banco de Desarrollo de América Latina y el Caribe (CAF)',
+            sub_platform=sub_platform,
+            description=full_desc[:280],
+            topic=detect_topic(title, desc),
+            type=type_,
+        ))
+
+    return out
+
+
+def fetch_caf() -> list[Tender]:
+    log.info('🌎 CAF · Banco de Desarrollo de América Latina y el Caribe')
+
+    URLS = [
+        ('https://www.caf.com/es/trabaja-con-nosotros/convocatorias/?from=&to=&enrollment=open',
+         'Convocatorias abiertas',
+         'opencall'),
+        ('https://www.caf.com/es/trabaja-con-nosotros/licitaciones/?from=&to=&status=open',
+         'Licitaciones abiertas',
+         'licitacion'),
+    ]
+
+    out: list[Tender] = []
+    for url, sub_platform, type_ in URLS:
+        try:
+            items = _fetch_caf_url(url, sub_platform, type_)
+            out.extend(items)
+            log.info(f'   {sub_platform}: {len(items)} items procesados')
+        except Exception as e:
+            log.warning(f'   ⚠ Error en {sub_platform}: {e}')
+
+    log.info(f'   → {len(out)} CAF total')
+    return out
+
+
+# ════════════════════════════════════════════════════════════════════════
+# 9. MERGE
 # ════════════════════════════════════════════════════════════════════════
 def merge_into(existing: list[dict], new_tenders: Iterable[Tender]) -> tuple[list[dict], int]:
     seen_urls   = {t.get('url',   '').strip().lower() for t in existing if t.get('url')}
     seen_titles = {t.get('title', '').strip().lower() for t in existing}
     added = 0
-
     for t in new_tenders:
         url   = (t.url or '').strip()
         title = (t.title or '').strip()
@@ -464,14 +908,13 @@ def merge_into(existing: list[dict], new_tenders: Iterable[Tender]) -> tuple[lis
             continue
         if (url and url.lower() in seen_urls) or title.lower() in seen_titles:
             continue
-
         existing.insert(0, t.to_dict())
         if url:
             seen_urls.add(url.lower())
         seen_titles.add(title.lower())
         added += 1
-        log.info(f'   + {t.platform[:24]:24} · {title[:80]}')
-
+        sub = t.sub_platform or t.platform
+        log.info(f'   + [{sub[:20]:20}] {title[:75]}')
     return existing, added
 
 
@@ -479,7 +922,7 @@ def merge_into(existing: list[dict], new_tenders: Iterable[Tender]) -> tuple[lis
 # 10. MAIN
 # ════════════════════════════════════════════════════════════════════════
 def main():
-    log.info(f'═══ Radar EU v4 — {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} ═══')
+    log.info(f'═══ Radar EU v6 — {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} ═══')
 
     try:
         with open('data.json', encoding='utf-8') as f:
@@ -491,51 +934,68 @@ def main():
     log.info(f'Existentes: {len(existing)} convocatorias')
 
     all_new: list[Tender] = []
-    summary: list[tuple[str, str, int]] = []   # (fuente, status, items)
+    summary: list[tuple[str, str, int]] = []
 
-    # ── Fase 1: RSS feeds ───────────────────────────────────────────
-    log.info('━━━ Fase 1: Fuentes RSS ━━━')
-    for platform, url in RSS_SOURCES:
-        try:
-            items = fetch_rss(platform, url)
-            all_new.extend(items)
-            summary.append((platform, '✅', len(items)))
-        except Exception as e:
-            log.error(f'{platform} explotó: {e}')
-            summary.append((platform, '❌', 0))
-
-    # ── Fase 2: TED API ──────────────────────────────────────────────
-    log.info('━━━ Fase 2: TED API v3 ━━━')
+    # 1. TED
+    log.info('━━━━━ Fuente 1: TED / DOUE Serie S ━━━━━')
     try:
         items = fetch_ted()
         all_new.extend(items)
-        summary.append(('TED / SIMAP', '✅' if items else '⚠', len(items)))
+        summary.append(('TED / DOUE Serie S', '✅' if items else '⚠', len(items)))
     except Exception as e:
         log.error(f'TED explotó: {e}')
-        summary.append(('TED / SIMAP', '❌', 0))
+        summary.append(('TED / DOUE Serie S', '❌', 0))
 
-    # ── Fase 3: Funding & Tenders RSS ────────────────────────────────
-    log.info('━━━ Fase 3: EU Funding & Tenders Portal ━━━')
+    # 2a. F&T RSS
+    log.info('━━━━━ Fuente 2a: F&T Portal · RSS ━━━━━')
     try:
-        items = fetch_funding_tenders()
+        items = fetch_funding_tenders_rss()
         all_new.extend(items)
-        summary.append(('Funding & Tenders', '✅' if items else '⚠', len(items)))
+        summary.append(('F&T · RSS', '✅' if items else '⚠', len(items)))
     except Exception as e:
-        log.error(f'Funding & Tenders explotó: {e}')
-        summary.append(('Funding & Tenders', '❌', 0))
+        log.error(f'F&T RSS explotó: {e}')
+        summary.append(('F&T · RSS', '❌', 0))
 
-    # ── Fase 4: Merge ────────────────────────────────────────────────
-    log.info(f'━━━ Fase 4: Fusión sin duplicados ━━━')
-    log.info(f'Candidatos brutos: {len(all_new)}')
+    # 2b. F&T API SEDIA
+    log.info('━━━━━ Fuente 2b: F&T Portal · SEDIA API ━━━━━')
+    try:
+        items = fetch_funding_tenders_api()
+        all_new.extend(items)
+        summary.append(('F&T · SEDIA API', '✅' if items else '⚠', len(items)))
+    except Exception as e:
+        log.error(f'F&T API explotó: {e}')
+        summary.append(('F&T · SEDIA API', '❌', 0))
+
+    # 3. EIT Urban Mobility
+    log.info('━━━━━ Fuente 3: EIT Urban Mobility ━━━━━')
+    try:
+        items = fetch_eit_urban_mobility()
+        all_new.extend(items)
+        summary.append(('EIT Urban Mobility', '✅' if items else '⚠', len(items)))
+    except Exception as e:
+        log.error(f'EIT UM explotó: {e}')
+        summary.append(('EIT Urban Mobility', '❌', 0))
+
+    # 4. CAF · Banco de Desarrollo de América Latina y el Caribe
+    log.info('━━━━━ Fuente 4: CAF · Banco de Desarrollo LATAM ━━━━━')
+    try:
+        items = fetch_caf()
+        all_new.extend(items)
+        summary.append(('CAF · Banco LATAM', '✅' if items else '⚠', len(items)))
+    except Exception as e:
+        log.error(f'CAF explotó: {e}')
+        summary.append(('CAF · Banco LATAM', '❌', 0))
+
+    # Merge
+    log.info(f'━━━━━ Merge: {len(all_new)} candidatos ━━━━━')
     merged, added = merge_into(existing, all_new)
 
-    # ── Fase 5: Persistir ────────────────────────────────────────────
     data['tenders']      = merged
     data['last_updated'] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     with open('data.json', 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # ── Resumen final ───────────────────────────────────────────────
+    # Resumen
     log.info('═══ RESUMEN ═══')
     log.info(f'{"Fuente":<28} {"Estado":<8} {"Items":>6}')
     log.info(f'{"─"*28} {"─"*8} {"─"*6}')
@@ -543,7 +1003,7 @@ def main():
         log.info(f'{plat:<28} {st:<8} {n:>6}')
     log.info(f'{"─"*28} {"─"*8} {"─"*6}')
     log.info(f'{"TOTAL nuevas añadidas":<28} {"":<8} {added:>6}')
-    log.info(f'{"TOTAL acumulado en data.json":<28} {"":<8} {len(merged):>6}')
+    log.info(f'{"TOTAL en data.json":<28} {"":<8} {len(merged):>6}')
 
 
 if __name__ == '__main__':
