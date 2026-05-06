@@ -285,7 +285,9 @@ def fetch_ted() -> list[Tender]:
             'query':            full_query,
             'fields':           ['publication-number', 'notice-title',
                                  'publication-date', 'buyer-name',
-                                 'buyer-country', 'links'],
+                                 'buyer-country', 'links',
+                                 'deadline-receipt-tender-date',
+                                 'deadline-receipt-request-date'],
             'limit':            PAGE_SIZE,
             'page':             page,
             'scope':            'ACTIVE',
@@ -348,6 +350,13 @@ def _ted_notice_to_tender(n: dict) -> Optional[Tender]:
     if country: desc_parts.append(country)
     desc = ' · '.join(desc_parts)
 
+    # Deadline: TED puede venir en distintos campos según el tipo de aviso
+    deadline_raw = (n.get('deadline-receipt-tender-date') or
+                    n.get('deadline-receipt-request-date') or '')
+    if isinstance(deadline_raw, list) and deadline_raw:
+        deadline_raw = deadline_raw[0]
+    deadline = parse_date(str(deadline_raw)) if deadline_raw else None
+
     return Tender(
         title=f'TED — {title}',
         url=link,
@@ -355,6 +364,7 @@ def _ted_notice_to_tender(n: dict) -> Optional[Tender]:
         sub_platform='TED',
         description=desc[:280],
         date=parse_date(n.get('publication-date', '')),
+        deadline=deadline,
         topic=detect_topic(title, desc),
         type='licitacion',
     )
