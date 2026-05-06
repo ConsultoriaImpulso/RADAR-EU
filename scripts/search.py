@@ -718,77 +718,146 @@ def fetch_eit_urban_mobility() -> list[Tender]:
 
 class _CafListParser(HTMLParser):
     """
-    Parser de las páginas /convocatorias/ y /licitaciones/ de CAF.
-    Cada item viene como card con:
-      <a href="/es/trabaja-con-nosotros/{convocatorias|licitaciones}/{slug}/">
-        <h3 o div con título>
-        <p o span con país/descripción/fecha>
-      </a>
+    Parser robusto de las páginas /convocatorias/ y /licitaciones/ de CAF.
+
+    Estrategia: detecta cualquier <a href="/es/trabaja-con-nosotros/{base_path}/{slug}/">
+    y acumula TODO el texto dentro de ese enlace (sin importar las etiquetas internas
+    — pueden ser <div>, <span>, <h3>, <p>, lo que sea). Después, en handle_endtag
+    cuando se cierra el </a>, limpia y separa título vs descripción.
+
+    Este enfoque resiste cambios de maquetación porque solo necesita:
+      1. Que CAF use <a href="..."> para enlazar a cada detalle (estándar HTML)
+      2. Que el slug del detalle empiece por /trabaja-con-nosotros/{base_path}/
     """
     def __init__(self, base_path: str):
         super().__init__()
         self.base_path = base_path  # 'convocatorias' o 'licitaciones'
         self.items: list[dict] = []
-        self._current: dict = {}
-        self._capture_title = False
-        self._capture_text = False
-        self._buffer: list[str] = []
-        self._inside_item_link = False
+        self._depth = 0          # profundidad de anidación de <a> activos
+        self._current_url = ''
+        self._current_text: list[str] = []
 
     def handle_starttag(self, tag, attrs):
+        if tag != 'a':
+            return
         attrs_d = dict(attrs)
+        href = attrs_d.get('href', '')
 
-        # Detectar enlace a una convocatoria/licitación específica
-        if tag == 'a':
-            href = attrs_d.get('href', '')
-            # Solo URLs que apuntan a un slug específico (no a la lista misma)
-            if (f'/trabaja-con-nosotros/{self.base_path}/' in href
-                    and href.rstrip('/').endswith('/') is False
-                    and not href.endswith(f'{self.base_path}/')):
-                # Es enlace a item individual (no a la lista padre)
-                self._inside_item_link = True
-                self._current = {'url': href if href.startswith('http')
-                                 else f'https://www.caf.com{href}'}
+        # ¿Apunta a un detalle de convocatoria/licitación?
+        target = f'/trabaja-con-nosotros/{self.base_path}/'
+        if target not in href:
+            return
 
-        # Headings dentro del enlace → título
-        if self._inside_item_link and tag in ('h2', 'h3', 'h4', 'h5'):
-            self._capture_title = True
-            self._buffer = []
+        # Excluir el link a la lista padre (que también contiene el target)
+        # Detalles tienen formato: /trabaja-con-nosotros/{base_path}/{slug}/
+        # Lista padre es:           /trabaja-con-nosotros/{base_path}/
+        # Saltamos el padre comprobando que después de target hay un slug.
+        idx = href.find(target)
+        rest = href[idx + len(target):].strip('/').strip()
+        if not rest or '/' in rest.split('?')[0].rstrip('/'):
+            # rest vacío = es la página padre. Si tiene '/' interior, podría
+            # ser un sub-recurso raro — lo dejamos pasar igualmente.
+            if not rest:
+                return
 
-        # Otros bloques de texto dentro del enlace → posible país/desc/fecha
-        if self._inside_item_link and tag in ('p', 'span', 'div', 'time'):
-            self._capture_text = True
+        # Empezamos a capturar
+        self._depth += 1
+        if self._depth == 1:  # solo el enlace exterior nos importa
+            url = href if href.startswith('http') else f'https://www.caf.com{href}'
+            self._current_url = url
+            self._current_text = []
 
     def handle_endtag(self, tag):
-        if self._capture_title and tag in ('h2', 'h3', 'h4', 'h5'):
-            title = ' '.join(self._buffer).strip()
-            if title and self._inside_item_link:
-                self._current['title'] = title
-            self._buffer = []
-            self._capture_title = False
+        if tag != 'a' or self._depth == 0:
+            return
+        self._depth -= 1
+        if self._depth != 0:
+            return
 
-        if tag == 'a' and self._inside_item_link:
-            # Cerrar item
-            if self._current.get('title') and self._current.get('url'):
-                self.items.append(self._current.copy())
-            self._current = {}
-            self._inside_item_link = False
-            self._capture_text = False
+        # Cerrar item: hemos terminado de leer todo el texto del enlace exterior
+        full_text = ' '.join(' '.join(self._current_text).split()).strip()
+        if not full_text or not self._current_url:
+            self._current_url = ''
+            self._current_text = []
+            return
+
+        # Heurística para extraer título y campos
+        # Texto típico que vimos en muestras:
+        #   "Cierre: 15 junio 2026 Convocatoria abierta Agua"
+        #   "Asunción, Paraguay Cierre: 30 abril 2026 Convocatoria abierta casaIntegracion Paraguay Desarrollo institucional"
+        #   "Cierre: 06 mayo 2026 Convocatoria abierta Colombia Infraestructura vial"
+        info = self._parse_text(full_text)
+        info['url'] = self._current_url
+        self.items.append(info)
+
+        # Reset
+        self._current_url = ''
+        self._current_text = []
 
     def handle_data(self, data):
-        text = data.strip()
-        if not text:
-            return
+        if self._depth >= 1:
+            txt = data.strip()
+            if txt:
+                self._current_text.append(txt)
 
-        if self._capture_title:
-            self._buffer.append(text)
-            return
+    @staticmethod
+    def _parse_text(text: str) -> dict:
+        """
+        Separa título / país / fecha / status desde un texto plano de card.
+        Ejemplo: "Asunción, Paraguay Cierre: 30 abril 2026 Convocatoria abierta casaIntegracion Paraguay Desarrollo institucional"
+        """
+        info = {'raw': text}
 
-        if self._inside_item_link and self._current.get('title'):
-            # Acumular descripción/país hasta cerrar el enlace
-            existing = self._current.get('desc', '')
-            if len(existing) < 280:
-                self._current['desc'] = (existing + ' ' + text).strip()[:280]
+        # 1) Status (Convocatoria abierta/cerrada, Licitación abierta/cerrada)
+        m_status = re.search(
+            r'(Convocatoria|Licitaci[oó]n)\s+(abierta|cerrada|pendiente)',
+            text, re.IGNORECASE
+        )
+        if m_status:
+            info['status'] = m_status.group(2).lower()
+            info['kind'] = m_status.group(1).lower()
+
+        # 2) Fecha de cierre
+        m_close = re.search(
+            r'Cierre[:\s]+(\d{1,2}\s+\w+\s+\d{4})', text, re.IGNORECASE
+        )
+        if m_close:
+            info['deadline_raw'] = m_close.group(1).strip()
+
+        # 3) Título: lo que queda quitando las pistas anteriores
+        title = text
+        if m_status:
+            title = title.replace(m_status.group(0), ' ')
+        if m_close:
+            title = title.replace(m_close.group(0), ' ')
+        # Limpiar espacios múltiples
+        title = ' '.join(title.split()).strip(' ·-·,')
+        info['title'] = title or text  # fallback al texto crudo si vaciamos todo
+
+        return info
+
+
+# Meses en español → número (para parse_date local de CAF)
+_MES_ES = {
+    'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04',
+    'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08',
+    'septiembre': '09', 'setiembre': '09', 'octubre': '10',
+    'noviembre': '11', 'diciembre': '12',
+}
+
+
+def _parse_caf_date(s: str) -> Optional[str]:
+    """Convierte '15 junio 2026' → '2026-06-15'."""
+    if not s:
+        return None
+    m = re.match(r'(\d{1,2})\s+(\w+)\s+(\d{4})', s.strip(), re.IGNORECASE)
+    if not m:
+        return parse_date(s)  # fallback a parser genérico
+    day, month_es, year = m.groups()
+    month_num = _MES_ES.get(month_es.lower())
+    if not month_num:
+        return None
+    return f'{year}-{month_num}-{day.zfill(2)}'
 
 
 def _detect_caf_country(text: str) -> str:
@@ -871,6 +940,7 @@ def _fetch_caf_url(url: str, sub_platform: str, type_: str) -> list[Tender]:
     for item in parser.items:
         title = item.get('title', '').strip()
         item_url = item.get('url', '').strip()
+        raw_text = item.get('raw', '').strip()
 
         if not title or not item_url:
             continue
@@ -878,16 +948,24 @@ def _fetch_caf_url(url: str, sub_platform: str, type_: str) -> list[Tender]:
             continue
         seen_urls.add(item_url)
 
-        desc = item.get('desc', '').strip()
-        country = _detect_caf_country(title + ' ' + desc)
+        # País a partir del texto completo (no solo del título)
+        country = _detect_caf_country(raw_text or title)
 
-        # Construir descripción final
-        full_desc = country
-        if desc and desc != title:
-            # Limpiar descripción de duplicados con el título
-            clean_desc = desc.replace(title, '').strip(' .·-')
-            if clean_desc:
-                full_desc = f'{country} · {clean_desc}'
+        # Status (abierta/cerrada) — solo nos quedamos con abiertas si las hubiera
+        # cerradas en la respuesta (la URL ya filtra por enrollment=open / status=open
+        # pero CAF sirve todo y filtra por JS, así que filtramos aquí también)
+        status = item.get('status', '')
+        if status == 'cerrada':
+            continue  # Saltar las cerradas
+
+        # Deadline parseado a YYYY-MM-DD
+        deadline = _parse_caf_date(item.get('deadline_raw', ''))
+
+        # Descripción combinando país + status + deadline original legible
+        desc_parts = [country]
+        if item.get('deadline_raw'):
+            desc_parts.append(f'Cierre: {item["deadline_raw"]}')
+        full_desc = ' · '.join(desc_parts)
 
         out.append(Tender(
             title=title[:240],
@@ -895,7 +973,8 @@ def _fetch_caf_url(url: str, sub_platform: str, type_: str) -> list[Tender]:
             platform='Banco de Desarrollo de América Latina y el Caribe (CAF)',
             sub_platform=sub_platform,
             description=full_desc[:280],
-            topic=detect_topic(title, desc),
+            deadline=deadline,
+            topic=detect_topic(title, raw_text),
             type=type_,
         ))
 
