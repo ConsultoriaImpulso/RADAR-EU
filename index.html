@@ -35,6 +35,13 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:
 .ptag:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);}
 .ptag.on{border-color:var(--white);background:rgba(255,255,255,.12);color:var(--white);}
 
+/* ── SUB-PLATFORMS (desglose) ───────────────── */
+.sub-platforms{margin:-0.6rem 0 1.4rem;padding:.85rem 1rem;background:rgba(255,255,255,.025);border:1px solid var(--bdr2);border-radius:var(--r);}
+.sub-platforms .platforms{margin-bottom:0;}
+.sub-label{margin-bottom:.45rem !important;color:var(--gold) !important;}
+.ptag.sub{font-size:10.5px;padding:4px 11px;border-color:rgba(212,168,67,.35);}
+.ptag.sub.on{border-color:var(--gold);background:rgba(212,168,67,.18);color:var(--gold);}
+
 /* ── TYPE BUTTONS (Open Call / Licitación / Beca) ── */
 .types{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:1.75rem;}
 .tbtn{padding:9px 18px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--bg2);color:var(--white);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:7px;}
@@ -127,6 +134,7 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 
 /* COL 3 — Entidad + tipo */
 .td-entity{color:var(--white);font-size:12px;margin-bottom:5px;}
+.td-subplatform{color:var(--gold);font-size:10.5px;margin-bottom:5px;letter-spacing:.02em;}
 .type-pill{display:inline-block;font-size:10px;padding:2px 9px;border-radius:20px;font-weight:600;letter-spacing:.03em;}
 .tp-opencall{background:#0e3d28;color:#52d68a;}
 .tp-licitacion{background:#0d2e4a;color:#5aaff0;}
@@ -170,31 +178,33 @@ tbody td{padding:13px 14px;vertical-align:top;font-size:12.5px;line-height:1.45;
 
 <!-- ══ HEADER ══════════════════════════════════ -->
 <div class="hdr">
-  <div class="eu-badge"><span class="eu-dot"></span>EU ALERT SYSTEM</div>
+  <div class="eu-badge"><span class="eu-dot"></span>SISTEMA DE ALERTAS UE</div>
   <h1>Radar de Licitaciones Europeas</h1>
-  <p class="sub">Movilidad · Transporte · Formación · Open Calls</p>
+  <p class="sub">Licitaciones · Convocatorias abiertas · Concursos para proyectos</p>
 
   <!-- Filtro 1: por entidad/plataforma -->
   <div class="filter-label">Filtrar por entidad</div>
   <div class="platforms" id="platforms">
-    <button class="ptag on" data-p="all">Todas las plataformas</button>
-    <button class="ptag" data-p="TED / SIMAP">TED / SIMAP</button>
-    <button class="ptag" data-p="EU Funding & Tenders Portal">EU Funding &amp; Tenders</button>
-    <button class="ptag" data-p="CINEA">CINEA</button>
-    <button class="ptag" data-p="EACEA">EACEA</button>
-    <button class="ptag" data-p="EIT Urban Mobility">EIT Urban Mobility</button>
-    <button class="ptag" data-p="Eltis">Eltis</button>
-    <button class="ptag" data-p="Horizon Europe">Horizon Europe</button>
-    <button class="ptag" data-p="CEF Transport">CEF Transport</button>
+    <button class="ptag on" data-p="all">Todas las entidades</button>
+    <button class="ptag" data-p="Tenders Electronic Daily (TED · DOUE Serie S)">TED · DOUE Serie S</button>
+    <button class="ptag" data-p="Portal de Financiación y Licitaciones de la UE (F&T Portal · SEDIA)">F&amp;T Portal (SEDIA)</button>
+    <button class="ptag" data-p="Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)">EIT Urban Mobility</button>
+    <button class="ptag" data-p="Banco de Desarrollo de América Latina y el Caribe (CAF)">CAF · Banco LATAM</button>
+  </div>
+
+  <!-- Sub-filtro por sub-plataforma (se muestra al seleccionar una entidad) -->
+  <div class="sub-platforms" id="subPlatforms" style="display:none">
+    <div class="filter-label sub-label">Sub-programa</div>
+    <div class="platforms" id="subPlatformsList"></div>
   </div>
 
   <!-- Filtro 2: por tipo de convocatoria -->
   <div class="filter-label">Filtrar por tipo</div>
   <div class="types" id="types">
     <button class="tbtn on" data-c="all">Todas</button>
-    <button class="tbtn" data-c="opencall"><span class="dot" style="background:#52d68a"></span>Open Calls</button>
+    <button class="tbtn" data-c="opencall"><span class="dot" style="background:#52d68a"></span>Convocatorias abiertas</button>
     <button class="tbtn" data-c="licitacion"><span class="dot" style="background:#5aaff0"></span>Licitaciones</button>
-    <button class="tbtn" data-c="beca"><span class="dot" style="background:#c084fc"></span>Becas</button>
+    <button class="tbtn" data-c="beca"><span class="dot" style="background:#c084fc"></span>Becas y formación</button>
   </div>
 </div>
 
@@ -236,18 +246,27 @@ const REFRESH_MS  = 60000;          // Auto-recarga del JSON cada minuto
 
 /* ─── MAPS ────────────────────────────────────── */
 const BADGE  = {mobility:'b-mobility',transport:'b-transport',training:'b-training',infrastr:'b-infrastr',smart:'b-smart',green:'b-green',other:'b-other'};
-const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN',infrastr:'INFRAESTR.',smart:'SMART CITY',green:'VERDE',other:'OTRA'};
+const BLABEL = {mobility:'MOVILIDAD',transport:'TRANSPORTE',training:'FORMACIÓN',infrastr:'INFRAESTRUCTURA',smart:'CIUDAD INTELIGENTE',green:'SOSTENIBILIDAD',other:'OTRA'};
 
 /* ─── STATE ───────────────────────────────────── */
-let allTenders     = [];
-let activeType     = 'all';   // all | opencall | licitacion | beca
-let activePlatform = 'all';
-let sortDir        = 'desc';   // 'desc' = más reciente primero (por defecto)
+let allTenders        = [];
+let activeType        = 'all';   // all | opencall | licitacion | beca
+let activePlatform    = 'all';
+let activeSubPlatform = 'all';   // sub-programa dentro de una plataforma
+let sortDir           = 'desc';
 
 /* ─── DETECT CALL TYPE ──────────────────────────
    Devuelve {l: label visible, c: clase css, k: key para filtrar}
-   k ∈ {'opencall', 'licitacion', 'beca', 'other'}                  */
+   k ∈ {'opencall', 'licitacion', 'beca', 'other'}
+   Si t.type viene marcado por el scraper, lo respetamos;
+   si no, hacemos detección por keywords como fallback.       */
 function callType(t) {
+  // Tipo explícito desde el scraper (más fiable)
+  if (t.type === 'beca')       return {l:'Beca / Fellowship', c:'tp-beca',       k:'beca'};
+  if (t.type === 'opencall')   return {l:'Open Call',         c:'tp-opencall',   k:'opencall'};
+  if (t.type === 'licitacion') return {l:'Licitación',        c:'tp-licitacion', k:'licitacion'};
+
+  // Fallback: detectar por contenido
   const s = (t.title+' '+(t.description||'')+' '+(t.platform||'')).toLowerCase();
   if (/master school|fellowship|beca|scholarship/i.test(s))  return {l:'Beca / Fellowship', c:'tp-beca',       k:'beca'};
   if (/open call|call for proposal/i.test(s))                return {l:'Open Call',         c:'tp-opencall',   k:'opencall'};
@@ -339,6 +358,7 @@ async function loadData(manual = false) {
       else        setUpdated(d.last_updated, false);
     }
 
+    rebuildSubPlatforms();
     render();
 
     if (manual) {
@@ -364,10 +384,11 @@ function render() {
 
   let rows = allTenders.filter(t => {
     const ct = callType(t);
-    const okType = activeType === 'all' || ct.k === activeType;
+    const okType = activeType === 'all' || (t.type ? t.type === activeType : ct.k === activeType);
     const okP    = activePlatform === 'all' || (t.platform||'') === activePlatform;
-    const okQ    = !q || [t.title, t.platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
-    return okType && okP && okQ;
+    const okSub  = activeSubPlatform === 'all' || (t.sub_platform||'') === activeSubPlatform;
+    const okQ    = !q || [t.title, t.platform, t.sub_platform, t.description, t.budget].join(' ').toLowerCase().includes(q);
+    return okType && okP && okSub && okQ;
   });
 
   // ── Sort by date ──────────────────────────────
@@ -409,6 +430,7 @@ function render() {
   <td class="td-date">${fmtDate(t.date)}</td>
   <td>
     <div class="td-entity">${esc(t.platform||'—')}</div>
+    ${t.sub_platform ? `<div class="td-subplatform">${esc(t.sub_platform)}</div>` : ''}
     <span class="type-pill ${ct.c}">${ct.l}</span>
   </td>
   <td>${hasBudget
@@ -429,12 +451,12 @@ function render() {
     <th>CONVOCATORIA · PAÍS / UE</th>
     <th>
       <span class="${arrowClass}" id="sortBtn" title="Ordenar por fecha">
-        PUBLICACIÓN <span class="arrow"></span>
+        FECHA DE PUBLICACIÓN <span class="arrow"></span>
       </span>
     </th>
-    <th>ENTIDAD &amp; TIPO</th>
+    <th>ENTIDAD Y TIPO DE CONVOCATORIA</th>
     <th>VALOR / FINANCIACIÓN</th>
-    <th style="text-align:center">LINK</th>
+    <th style="text-align:center">ENLACE</th>
   </tr></thead>
   <tbody>${trs}</tbody>
 </table></div>`;
@@ -479,7 +501,7 @@ function startCountdown() {
     const m = Math.floor((diff % 3600000)  / 60000);
     const s = Math.floor((diff % 60000)    / 1000);
     document.getElementById('countdown').textContent =
-      `· Reset en ${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+      `· Reinicio semanal en ${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
   }
   tick(); setInterval(tick, 1000);
 }
@@ -495,8 +517,59 @@ document.getElementById('types').addEventListener('click', e => {
 
 document.getElementById('platforms').addEventListener('click', e => {
   const b = e.target.closest('.ptag'); if (!b) return;
-  document.querySelectorAll('.ptag').forEach(x => x.classList.remove('on'));
-  b.classList.add('on'); activePlatform = b.dataset.p; render();
+  // Solo quitar 'on' de los pills del filtro principal (no del sub-filtro)
+  document.querySelectorAll('#platforms .ptag').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  activePlatform = b.dataset.p;
+  activeSubPlatform = 'all';   // resetear sub-filtro al cambiar plataforma
+  rebuildSubPlatforms();
+  render();
+});
+
+/* ─── SUB-PLATAFORMAS DINÁMICAS ───────────────
+   Cuando se selecciona una plataforma con sub-programas
+   (ej. F&T Portal o EIT UM), se muestran los disponibles
+   detectados a partir de los datos cargados.            */
+function rebuildSubPlatforms() {
+  const wrap = document.getElementById('subPlatforms');
+  const list = document.getElementById('subPlatformsList');
+
+  if (activePlatform === 'all') {
+    wrap.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+
+  // Recolectar sub_platforms únicos de la plataforma activa
+  const subs = new Set();
+  for (const t of allTenders) {
+    if ((t.platform || '') === activePlatform && t.sub_platform) {
+      subs.add(t.sub_platform);
+    }
+  }
+
+  // Si solo hay 1 (o ninguno), no tiene sentido mostrar el sub-filtro
+  if (subs.size <= 1) {
+    wrap.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+
+  // Construir botones
+  const buttons = ['<button class="ptag sub on" data-s="all">Todas</button>'];
+  for (const s of [...subs].sort()) {
+    buttons.push(`<button class="ptag sub" data-s="${esc(s)}">${esc(s)}</button>`);
+  }
+  list.innerHTML = buttons.join('');
+  wrap.style.display = 'block';
+}
+
+document.getElementById('subPlatformsList').addEventListener('click', e => {
+  const b = e.target.closest('.ptag'); if (!b) return;
+  document.querySelectorAll('#subPlatformsList .ptag').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  activeSubPlatform = b.dataset.s;
+  render();
 });
 
 document.getElementById('searchInput').addEventListener('input', render);
