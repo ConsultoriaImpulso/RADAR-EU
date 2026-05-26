@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-05-25T16:13:57Z",
+  "last_updated": "2026-05-26T10:05:42Z",
   "last_reset": "2026-05-24T02:55:00Z",
   "tenders": [
+    {
+      "title": "Consultoría para fortalecer la cadena forestal de Costa Rica",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-fortalecer-la-cadena-productiva-y-comercial-de-la-madera-de-plantaciones-forestales-en-costa-rica/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇨🇷 Costa Rica",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "79af796b-4f2",
+      "added_at": "2026-05-26T10:05:42Z"
+    },
     {
       "title": "Modelo tarifario: agua potable, alcantarillado y aguas residuales",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/modelo-tarifario-integral-para-la-prestacion-de-los-servicios-de-agua-potable-alcantarillado-y-tratamiento-de-aguas-residuales-en-el-mediano-y-largo-plazo/",
