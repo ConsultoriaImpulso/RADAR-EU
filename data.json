@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-05-26T17:18:54Z",
+  "last_updated": "2026-05-27T10:03:28Z",
   "last_reset": "2026-05-24T02:55:00Z",
   "tenders": [
+    {
+      "title": "Master School and Fellowship Open Call 2027",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/master-school-and-fellowship-open-call-2027/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Master School & Fellowship",
+      "description": "EIT Urban Mobility invites universities, academic consortia, and education-focused innovators to submit proposals to its Master School and Fellowship Open Call...",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "training",
+      "type": "beca",
+      "id": "6e89e3ea-6b8",
+      "added_at": "2026-05-27T10:03:28Z"
+    },
     {
       "title": "Consultoría para fortalecer la cadena forestal de Costa Rica",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-fortalecer-la-cadena-productiva-y-comercial-de-la-madera-de-plantaciones-forestales-en-costa-rica/",
