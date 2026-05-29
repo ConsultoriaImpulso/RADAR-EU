@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-05-29T12:43:24Z",
+  "last_updated": "2026-05-29T17:25:46Z",
   "last_reset": "2026-05-24T02:55:00Z",
   "tenders": [
+    {
+      "title": "Consultoría sobre los Centros de Atención Fronteriza en Nariño",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-la-elaboracion-de-los-estudios-y-disenos-definitivos-para-la-construccion-de-los-centros-binacionales-de-atencion-fronteriza-cebaf-en-rumichaca-y-mataje-alto-mira-y-frontera-narino/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "b8c4603c-88f",
+      "added_at": "2026-05-29T17:25:46Z"
+    },
     {
       "title": "Master School and Fellowship Open Call 2027",
       "url": "https://www.eiturbanmobility.eu/call-for-proposals/master-school-and-fellowship-open-call-2027/",
