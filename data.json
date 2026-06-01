@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-05-31T15:09:55Z",
+  "last_updated": "2026-06-01T11:45:15Z",
   "last_reset": "2026-05-31T03:29:58Z",
   "tenders": [
+    {
+      "title": "RIS Education Open Call 2027",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/ris-education-open-call-2027/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Esquema Regional de Innovación (RIS)",
+      "description": "The RIS Education Open Call 2027 aims at funding projects that can support the overall RIS strategy and...",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "training",
+      "type": "opencall",
+      "id": "2fe64c3b-652",
+      "added_at": "2026-06-01T11:45:15Z"
+    },
     {
       "title": "Modelo tarifario: agua potable, alcantarillado y aguas residuales",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/modelo-tarifario-integral-para-la-prestacion-de-los-servicios-de-agua-potable-alcantarillado-y-tratamiento-de-aguas-residuales-en-el-mediano-y-largo-plazo/",
