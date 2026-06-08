@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-06-07T15:16:59Z",
+  "last_updated": "2026-06-08T11:06:32Z",
   "last_reset": "2026-06-07T03:33:41Z",
   "tenders": [
+    {
+      "title": "Consultoría de Contratación: Programa RE-SET - Biodiversidad y Turismo",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-contratacion-del-organismo-ejecutor-del-programa-re-set-restauracion-de-la-biodiversidad-a-traves-de-servicios-ecosistemas-de-turismo/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "e63ccb83-c71",
+      "added_at": "2026-06-08T11:06:32Z"
+    },
+    {
+      "title": "HEIPowered Startup Pitch Competition - Second Edition",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/heipowered-startup-pitch-competition-second-edition/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Programa de Apoyo a Startups",
+      "description": "Under the EIT Higher Education Initiative Community EIT Urban Mobility invites startups created or supported by projects funded...",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "training",
+      "type": "opencall",
+      "id": "b4f02525-c95",
+      "added_at": "2026-06-08T11:06:32Z"
+    },
     {
       "title": "Modelo tarifario: agua potable, alcantarillado y aguas residuales",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/modelo-tarifario-integral-para-la-prestacion-de-los-servicios-de-agua-potable-alcantarillado-y-tratamiento-de-aguas-residuales-en-el-mediano-y-largo-plazo/",
