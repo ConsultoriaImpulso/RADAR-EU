@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-06-08T14:00:56Z",
+  "last_updated": "2026-06-08T17:00:07Z",
   "last_reset": "2026-06-07T03:33:41Z",
   "tenders": [
+    {
+      "title": "Servicio de Gestión de Identidades y Control de Acceso Lógico IAM/IGA",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-internacional-para-el-servicio-de-gestion-de-identidades-y-control-de-acceso-logico-iamiga-de-caf/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "8a3b5e30-b40",
+      "added_at": "2026-06-08T17:00:07Z"
+    },
     {
       "title": "Consultoría de Contratación: Programa RE-SET - Biodiversidad y Turismo",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-contratacion-del-organismo-ejecutor-del-programa-re-set-restauracion-de-la-biodiversidad-a-traves-de-servicios-ecosistemas-de-turismo/",
