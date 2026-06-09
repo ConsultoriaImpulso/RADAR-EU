@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-06-09T12:31:34Z",
+  "last_updated": "2026-06-09T16:24:12Z",
   "last_reset": "2026-06-07T03:33:41Z",
   "tenders": [
+    {
+      "title": "Estrategia de gestión ambiental integral - ecosistemas del Río Guayas",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/contratacion-de-un-estudio-enfocado-en-la-formulacion-de-una-estrategia-de-gestion-ambiental-integral-de-los-ecosistemas-estrategicos-de-la-cuenca-del-rio-guayas/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "449a7462-092",
+      "added_at": "2026-06-09T16:24:12Z"
+    },
+    {
+      "title": "Estrategia de Gestión Social para la Integración de Prestadores - Perú",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/diseno-e-implementacion-de-estrategia-de-gestion-social-para-la-integracion-de-prestadores-en-las-regiones-de-lima-y-amazonas-peru/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇵🇪 Perú",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "305d2380-89d",
+      "added_at": "2026-06-09T16:24:12Z"
+    },
     {
       "title": "Servicio de Gestión de Identidades y Control de Acceso Lógico IAM/IGA",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-internacional-para-el-servicio-de-gestion-de-identidades-y-control-de-acceso-logico-iamiga-de-caf/",
