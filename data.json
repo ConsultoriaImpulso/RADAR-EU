@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-06-10T16:54:13Z",
+  "last_updated": "2026-06-11T10:45:46Z",
   "last_reset": "2026-06-07T03:33:41Z",
   "tenders": [
+    {
+      "title": "Concurso público. Adecuación de Oficina de País de CAF España",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-servicios-llave-en-mano-para-adecuacion-de-la-oficina-caf-espana/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "a3a2212c-c28",
+      "added_at": "2026-06-11T10:45:46Z"
+    },
     {
       "title": "Estrategia de gestión ambiental integral - ecosistemas del Río Guayas",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/contratacion-de-un-estudio-enfocado-en-la-formulacion-de-una-estrategia-de-gestion-ambiental-integral-de-los-ecosistemas-estrategicos-de-la-cuenca-del-rio-guayas/",
