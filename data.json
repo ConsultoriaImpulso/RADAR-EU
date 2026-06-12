@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-06-12T12:49:59Z",
+  "last_updated": "2026-06-12T16:37:00Z",
   "last_reset": "2026-06-07T03:33:41Z",
   "tenders": [
+    {
+      "title": "Programa de becas CAF-UNIR 2026",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/programa-becas-caf-unir-2026/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "training",
+      "type": "opencall",
+      "id": "9e244f4f-fc2",
+      "added_at": "2026-06-12T16:37:00Z"
+    },
     {
       "title": "Concurso público. Adecuación de Oficina de País de CAF España",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-servicios-llave-en-mano-para-adecuacion-de-la-oficina-caf-espana/",
