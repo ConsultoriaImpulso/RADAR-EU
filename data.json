@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-06-15T18:20:02Z",
+  "last_updated": "2026-06-16T11:20:53Z",
   "last_reset": "2026-06-14T03:40:34Z",
   "tenders": [
+    {
+      "title": "Concurso público: instalaciones e inmuebles –edificio CAF Panamá",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-para-gestion-de-instalaciones-e-inmuebles-facility-management-edificio-caf-panama/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇵🇦 Panamá",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "fe68073b-f71",
+      "added_at": "2026-06-16T11:20:53Z"
+    },
     {
       "title": "Modelo tarifario: agua potable, alcantarillado y aguas residuales",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/modelo-tarifario-integral-para-la-prestacion-de-los-servicios-de-agua-potable-alcantarillado-y-tratamiento-de-aguas-residuales-en-el-mediano-y-largo-plazo/",
