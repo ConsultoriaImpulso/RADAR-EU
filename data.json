@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-07-14T15:14:42Z",
+  "last_updated": "2026-07-15T08:22:01Z",
   "last_reset": "2026-07-12T02:26:10Z",
   "tenders": [
+    {
+      "title": "Connect & Co-create NEB 2027 Open Call",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/connect-co-create-neb-2027-open-call/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Otras convocatorias abiertas",
+      "description": "EIT Urban Mobility, as lead of the EIT Community New European Bauhaus, invites organisations from across Europe to submit proposals...",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "smart",
+      "type": "opencall",
+      "id": "ec3f49d4-80e",
+      "added_at": "2026-07-15T08:22:01Z"
+    },
     {
       "title": "Concurso público: Construcción a riesgo (CMAR) - Edificio CAF Chile",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-para-la-contratacion-de-servicios-de-construccion-bajo-modalidad-de-gerencia-de-construccion-a-riesgo-cmar-edificio-caf-chile/",
