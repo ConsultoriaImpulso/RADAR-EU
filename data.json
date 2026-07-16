@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-07-15T15:16:16Z",
+  "last_updated": "2026-07-16T08:20:34Z",
   "last_reset": "2026-07-12T02:26:10Z",
   "tenders": [
+    {
+      "title": "CAF abre convocatoria para capacitar al MOPT de Costa Rica",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/caf-abre-convocatoria-para-desarrollar-un-programa-de-capacitacion-para-el-mopt-de-costa-rica/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇨🇷 Costa Rica",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "ce447b4b-df4",
+      "added_at": "2026-07-16T08:20:34Z"
+    },
     {
       "title": "Student Entrepreneur Grant Scheme (SEGS) Open Call",
       "url": "https://www.eiturbanmobility.eu/call-for-proposals/student-entrepreneur-grant-scheme-segs-open-call/",
