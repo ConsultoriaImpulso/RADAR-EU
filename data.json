@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-07-17T15:04:01Z",
+  "last_updated": "2026-07-18T07:59:12Z",
   "last_reset": "2026-07-12T02:26:10Z",
   "tenders": [
+    {
+      "title": "Consultoría en Prevención y Detección de Prácticas Prohibidas",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-en-prevencion-y-deteccion-de-practicas-prohibidas/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "55ad8805-d89",
+      "added_at": "2026-07-18T07:59:12Z"
+    },
     {
       "title": "Convocatoria para el estudio prospectivo del turismo en ALC al 2035",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-desarrollar-el-estudio-prospectivo-del-turismo-en-america-latina-y-el-caribe-a-2035/",
