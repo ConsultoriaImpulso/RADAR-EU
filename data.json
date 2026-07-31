@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-07-31T11:52:57Z",
+  "last_updated": "2026-07-31T15:52:19Z",
   "last_reset": "2026-07-26T02:27:54Z",
   "tenders": [
+    {
+      "title": "Estrategia de Integración Económica: Población Migrante en Ecuador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/desarrollo-de-la-estrategia-de-integracion-economica-para-la-unidad-fija-y-movil-de-atencion-a-poblacion-migrante-y-vulnerable-en-quito-ecuador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇪🇨 Ecuador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "8fc0e6d0-dc7",
+      "added_at": "2026-07-31T15:52:19Z"
+    },
     {
       "title": "Programa de becas CAF-UNIR 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/programa-becas-caf-unir-2026/",
