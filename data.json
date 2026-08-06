@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-08-05T15:52:10Z",
+  "last_updated": "2026-08-06T08:43:57Z",
   "last_reset": "2026-08-02T02:26:47Z",
   "tenders": [
+    {
+      "title": "Convocatoria para el estudio prospectivo del turismo en ALC al 2035",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-desarrollar-el-estudio-prospectivo-del-turismo-en-america-latina-y-el-caribe-a-2035/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "b79fb289-4f9",
+      "added_at": "2026-08-06T08:43:57Z"
+    },
     {
       "title": "Programa de becas CAF-UNIR 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/programa-becas-caf-unir-2026/",
