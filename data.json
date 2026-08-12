@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-08-11T14:48:45Z",
+  "last_updated": "2026-08-12T07:38:34Z",
   "last_reset": "2026-08-09T01:22:16Z",
   "tenders": [
+    {
+      "title": "Expresión de interés para rehabilitación de pistas aéreas en Ecuador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-expresion-de-interes-para-estudios-de-rehabilitacion-de-pistas-en-cinco-aeropuertos-de-ecuador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇪🇨 Ecuador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "9830a69a-a73",
+      "added_at": "2026-08-12T07:38:34Z"
+    },
+    {
+      "title": "Convocatoria para modernizar servicios de navegación aérea de Ecuador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-expresion-de-interes-para-consultoria-de-modernizacion-de-los-servicios-de-navegacion-aerea-en-ecuador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇪🇨 Ecuador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "814e6bbf-e03",
+      "added_at": "2026-08-12T07:38:34Z"
+    },
     {
       "title": "CAF abre convocatoria para capacitar al MOPT de Costa Rica",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/caf-abre-convocatoria-para-desarrollar-un-programa-de-capacitacion-para-el-mopt-de-costa-rica/",
