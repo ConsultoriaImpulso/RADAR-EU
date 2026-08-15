@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-08-14T14:42:54Z",
+  "last_updated": "2026-08-15T06:44:47Z",
   "last_reset": "2026-08-09T01:22:16Z",
   "tenders": [
+    {
+      "title": "Compra de Estaciones de Trabajo (Laptops)- Infraestructura Tecnológica",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-internacional-para-la-compra-de-estaciones-de-trabajo-laptops-para-la-infraestructura-tecnologica-de-caf/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "5ee4a10d-039",
+      "added_at": "2026-08-15T06:44:47Z"
+    },
     {
       "title": "Expresión de interés para rehabilitación de pistas aéreas en Ecuador",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-expresion-de-interes-para-estudios-de-rehabilitacion-de-pistas-en-cinco-aeropuertos-de-ecuador/",
