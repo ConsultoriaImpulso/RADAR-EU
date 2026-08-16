@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-08-16T10:15:06Z",
+  "last_updated": "2026-08-16T14:11:33Z",
   "last_reset": "2026-08-16T01:04:10Z",
   "tenders": [
+    {
+      "title": "Concurso para estudios del primer cable submarino de El Salvador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-para-estudios-de-apoyo-al-proyecto-del-primer-cable-submarino-de-el-salvador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇸🇻 El Salvador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "e9f6d5db-546",
+      "added_at": "2026-08-16T14:11:33Z"
+    },
     {
       "title": "Programa de becas CAF-UNIR 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/programa-becas-caf-unir-2026/",
