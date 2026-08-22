@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-08-21T14:22:34Z",
+  "last_updated": "2026-08-22T06:46:51Z",
   "last_reset": "2026-08-16T01:04:10Z",
   "tenders": [
+    {
+      "title": "RFI – Estructuración de vehículo de inversión para turismo en ALC",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-rfi-consultoria-para-la-estructuracion-de-un-vehiculo-de-inversion-para-el-desarrollo-del-turismo-en-america-latina-y-el-caribe/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "384a011c-cfd",
+      "added_at": "2026-08-22T06:46:51Z"
+    },
     {
       "title": "Diseño y Construcción para Remodelación de la OP CAF Costa Rica",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-para-servicios-de-diseno-y-construccion-para-la-remodelacion-de-la-op-caf-costa-rica/",
