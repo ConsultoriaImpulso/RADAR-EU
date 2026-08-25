@@ -1,7 +1,49 @@
 {
-  "last_updated": "2026-08-24T14:30:09Z",
+  "last_updated": "2026-08-25T06:54:53Z",
   "last_reset": "2026-08-23T01:05:41Z",
   "tenders": [
+    {
+      "title": "2",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/?from=&to=&enrollment=open&page=2",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "52415600-99e",
+      "added_at": "2026-08-25T06:54:53Z"
+    },
+    {
+      "title": "1",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/?from=&to=&enrollment=open&page=1",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "9093aa57-dd3",
+      "added_at": "2026-08-25T06:54:53Z"
+    },
+    {
+      "title": "SDI para sistema integral de atención a población migrante en Quito",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-para-el-desarrollo-del-sistema-de-informacion-integral-para-la-atencion-a-poblacion-migrante-y-vulnerable-en-quito/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "227f28ab-140",
+      "added_at": "2026-08-25T06:54:53Z"
+    },
     {
       "title": "Programa de becas CAF-UNIR 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/programa-becas-caf-unir-2026/",
