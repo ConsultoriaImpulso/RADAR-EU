@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-08-25T14:32:45Z",
+  "last_updated": "2026-08-26T06:55:47Z",
   "last_reset": "2026-08-23T01:05:41Z",
   "tenders": [
+    {
+      "title": "Laboratorio CAF de Inclusión Financiera 2026",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/laboratorio-caf-de-inclusion-financiera-2026/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "7ce05b00-4b0",
+      "added_at": "2026-08-26T06:55:47Z"
+    },
     {
       "title": "2",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/?from=&to=&enrollment=open&page=2",
