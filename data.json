@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-08-27T23:18:36Z",
+  "last_updated": "2026-08-28T18:24:33Z",
   "last_reset": "2026-08-23T01:05:41Z",
   "tenders": [
+    {
+      "title": "Consultoría sobre la propuesta pedagógica de las artes en El Salvador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-el-diseno-de-la-propuesta-pedagogica-del-centro-multifuncional-de-las-artes-en-el-salvador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇸🇻 El Salvador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "4252805a-791",
+      "added_at": "2026-08-28T18:24:33Z"
+    },
+    {
+      "title": "Consultoría para diseñar el plan de las artes en El Salvador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-el-diseno-del-plan-estrategico-del-centro-multifuncional-de-las-artes-en-el-salvador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇸🇻 El Salvador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "6c972e70-a50",
+      "added_at": "2026-08-28T18:24:33Z"
+    },
     {
       "title": "Laboratorio CAF de Inclusión Financiera 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/laboratorio-caf-de-inclusion-financiera-2026/",
