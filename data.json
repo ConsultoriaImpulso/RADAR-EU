@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-01T11:23:45Z",
+  "last_updated": "2026-09-01T14:25:05Z",
   "last_reset": "2026-08-30T03:25:46Z",
   "tenders": [
+    {
+      "title": "SDI para la creación del Sistema de Seguridad Inteligente en Lima",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-sdi-para-la-creacion-del-sistema-de-seguridad-inteligente-en-lima-metropolitana/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "f27891ee-b24",
+      "added_at": "2026-09-01T14:25:05Z"
+    },
     {
       "title": "2",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/?from=&to=&enrollment=open&page=2",
