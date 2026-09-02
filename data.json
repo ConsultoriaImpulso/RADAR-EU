@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-02T10:57:07Z",
+  "last_updated": "2026-09-02T13:59:00Z",
   "last_reset": "2026-08-30T03:25:46Z",
   "tenders": [
+    {
+      "title": "Reconstrucción y Ampliación de Sistemas de Riego - Río Guayubín",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/estudios-y-disenos-finales-del-proyecto-de-reconstruccion-y-ampliacion-de-sistemas-de-riego-del-rio-guayubin-1/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "c25b159e-f1b",
+      "added_at": "2026-09-02T13:59:00Z"
+    },
     {
       "title": "SDI para la creación del Sistema de Seguridad Inteligente en Lima",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-sdi-para-la-creacion-del-sistema-de-seguridad-inteligente-en-lima-metropolitana/",
