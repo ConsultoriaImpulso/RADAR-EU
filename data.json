@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-04T17:13:33Z",
+  "last_updated": "2026-09-05T10:17:13Z",
   "last_reset": "2026-08-30T03:25:46Z",
   "tenders": [
+    {
+      "title": "Convocatoria para el estudio prospectivo del turismo en ALC al 2035",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-desarrollar-el-estudio-prospectivo-del-turismo-en-america-latina-y-el-caribe-a-2035/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "fd897f60-cc2",
+      "added_at": "2026-09-05T10:17:13Z"
+    },
     {
       "title": "Reconstrucción y Ampliación de Sistemas de Riego - Río Guayubín",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/estudios-y-disenos-finales-del-proyecto-de-reconstruccion-y-ampliacion-de-sistemas-de-riego-del-rio-guayubin-1/",
