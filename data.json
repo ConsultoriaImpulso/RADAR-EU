@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-07T15:24:35Z",
+  "last_updated": "2026-09-07T18:27:28Z",
   "last_reset": "2026-09-06T02:44:57Z",
   "tenders": [
+    {
+      "title": "RFI – Estructuración de vehículo de inversión para turismo en ALC",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-rfi-consultoria-para-la-estructuracion-de-un-vehiculo-de-inversion-para-el-desarrollo-del-turismo-en-america-latina-y-el-caribe/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "e20ca5d2-059",
+      "added_at": "2026-09-07T18:27:28Z"
+    },
     {
       "title": "Servicio Centro de Investigación y Desarrollo en Ciencias Aplicadas",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/servicios-especializados-para-la-estructuracion-tecnica-el-diseno-integral-y-la-gestion-de-permisos-del-cidca/",
