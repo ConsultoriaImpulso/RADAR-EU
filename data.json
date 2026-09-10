@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-09T17:23:27Z",
+  "last_updated": "2026-09-10T10:57:37Z",
   "last_reset": "2026-09-06T02:44:57Z",
   "tenders": [
+    {
+      "title": "Reconstrucción y Ampliación: Sistemas de Riego del Río Guayubín.",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/supervision-de-estudios-y-disenos-finales-del-proyecto-de-reconstruccion-y-ampliacion-de-sistemas-de-riego-del-rio-guayubin/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "71f579b8-f56",
+      "added_at": "2026-09-10T10:57:37Z"
+    },
     {
       "title": "RFI – Estructuración de vehículo de inversión para turismo en ALC",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-rfi-consultoria-para-la-estructuracion-de-un-vehiculo-de-inversion-para-el-desarrollo-del-turismo-en-america-latina-y-el-caribe/",
