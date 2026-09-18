@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-17T17:48:16Z",
+  "last_updated": "2026-09-18T10:53:41Z",
   "last_reset": "2026-09-13T02:57:59Z",
   "tenders": [
+    {
+      "title": "Postúlate a las becas CAF-EUDE para cursar un máster online",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/becas-caf-eude/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "training",
+      "type": "opencall",
+      "id": "83d932e9-3a3",
+      "added_at": "2026-09-18T10:53:41Z"
+    },
     {
       "title": "Enhance NEB 2027 Open Call",
       "url": "https://www.eiturbanmobility.eu/call-for-proposals/enhance-neb-2027-open-call/",
