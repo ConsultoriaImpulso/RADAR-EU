@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-21T18:57:22Z",
+  "last_updated": "2026-09-22T11:15:55Z",
   "last_reset": "2026-09-20T03:13:02Z",
   "tenders": [
+    {
+      "title": "Strategic Innovation Open Call",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/strategic-innovation-open-call/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Convocatoria de Innovación Estratégica (Strategic Innovation)",
+      "description": "EIT Urban Mobility invites innovators from across Europe to submit a proposal to its Strategic Innovation Open Call,...",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "smart",
+      "type": "opencall",
+      "id": "8fa6a46b-1fc",
+      "added_at": "2026-09-22T11:15:55Z"
+    },
     {
       "title": "Servicio Centro de Investigación y Desarrollo en Ciencias Aplicadas",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/servicios-especializados-para-la-estructuracion-tecnica-el-diseno-integral-y-la-gestion-de-permisos-del-cidca/",
