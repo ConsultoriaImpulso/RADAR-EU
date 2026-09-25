@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-09-25T14:53:19Z",
+  "last_updated": "2026-09-25T18:07:40Z",
   "last_reset": "2026-09-20T03:13:02Z",
   "tenders": [
+    {
+      "title": "Convocatoria de energía solar y alumbrado eficiente en Barranquilla",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-implementar-soluciones-de-energia-solar-y-alumbrado-eficiente-en-barranquilla/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "green",
+      "type": "opencall",
+      "id": "26dc1515-332",
+      "added_at": "2026-09-25T18:07:40Z"
+    },
     {
       "title": "Strategic Innovation Open Call",
       "url": "https://www.eiturbanmobility.eu/call-for-proposals/strategic-innovation-open-call/",
