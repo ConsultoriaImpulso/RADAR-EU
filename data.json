@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-10-08T19:33:02Z",
+  "last_updated": "2026-10-09T12:53:23Z",
   "last_reset": "2026-10-04T04:08:34Z",
   "tenders": [
+    {
+      "title": "SME Market Expansion Open Call 2027",
+      "url": "https://www.eiturbanmobility.eu/call-for-proposals/sme-market-expansion-open-call-2027/",
+      "platform": "Instituto Europeo de Innovación y Tecnología – Movilidad Urbana (EIT Urban Mobility)",
+      "sub_platform": "Expansión de Mercado para PyMEs (SME Market Expansion)",
+      "description": "The EIT Urban Mobility is thrilled to launch the new edition of the SME Market Expansion Open Call....",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "smart",
+      "type": "opencall",
+      "id": "740a6a32-0b8",
+      "added_at": "2026-10-09T12:53:23Z"
+    },
     {
       "title": "SDI para sistema integral de atención a población migrante en Quito",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-para-el-desarrollo-del-sistema-de-informacion-integral-para-la-atencion-a-poblacion-migrante-y-vulnerable-en-quito/",
