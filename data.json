@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-10-19T12:39:57Z",
+  "last_updated": "2026-10-19T16:43:15Z",
   "last_reset": "2026-10-18T02:52:37Z",
   "tenders": [
+    {
+      "title": "Licitación para rehabilitar redes eléctricas en República Dominicana",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/licitacion-para-rehabilitar-redes-electricas-en-republica-dominicana/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇩🇴 R. Dominicana",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "baaeebdb-d36",
+      "added_at": "2026-10-19T16:43:15Z"
+    },
+    {
+      "title": "Consultoría para evaluación terminal del proyecto panelero en Colombia",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/consultoria-para-la-evaluacion-terminal-del-proyecto-de-transformacion-del-subsector-panelero-en-colombia/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇨🇴 Colombia",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "c50484f0-bea",
+      "added_at": "2026-10-19T16:43:15Z"
+    },
     {
       "title": "Laboratorio CAF de Inclusión Financiera 2026",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/laboratorio-caf-de-inclusion-financiera-2026/",
