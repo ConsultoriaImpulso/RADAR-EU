@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-10-21T11:27:18Z",
+  "last_updated": "2026-10-21T14:46:33Z",
   "last_reset": "2026-10-18T02:52:37Z",
   "tenders": [
+    {
+      "title": "Convocatoria para la rehabilitación eléctrica en República Dominicana",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-la-contratacion-de-obras-de-rehabilitacion-de-redes-electricas-en-republica-dominicana/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇩🇴 R. Dominicana",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "88022bb9-f83",
+      "added_at": "2026-10-21T14:46:33Z"
+    },
     {
       "title": "Licitación para rehabilitar redes eléctricas en República Dominicana",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/licitacion-para-rehabilitar-redes-electricas-en-republica-dominicana/",
