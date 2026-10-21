@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-10-21T14:46:33Z",
+  "last_updated": "2026-10-21T18:17:24Z",
   "last_reset": "2026-10-18T02:52:37Z",
   "tenders": [
+    {
+      "title": "SDI para desarrollar un diplomado en gestión financiera en Ecuador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-para-el-desarrollo-de-un-diplomado-en-gestion-financiera-subnacional-en-ecuador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇪🇨 Ecuador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "e4a706e0-63d",
+      "added_at": "2026-10-21T18:17:24Z"
+    },
+    {
+      "title": "Concurso público para servicios de comedor y café en la sede CAF",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-para-servicios-de-comedor-y-cafe-en-la-sede-caf-en-caracas-venezuela/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "7f8ddab7-2cf",
+      "added_at": "2026-10-21T18:17:24Z"
+    },
     {
       "title": "Convocatoria para la rehabilitación eléctrica en República Dominicana",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-la-contratacion-de-obras-de-rehabilitacion-de-redes-electricas-en-republica-dominicana/",
