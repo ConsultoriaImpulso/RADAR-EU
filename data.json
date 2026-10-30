@@ -1,7 +1,21 @@
 {
-  "last_updated": "2026-10-30T16:23:11Z",
+  "last_updated": "2026-10-30T18:54:52Z",
   "last_reset": "2026-10-25T03:02:32Z",
   "tenders": [
+    {
+      "title": "Fortalecimiento Instituto de Medicina Legal y Ciencias Forenses Panamá",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/convocatoria-para-el-fortalecimiento-del-instituto-de-medicina-legal-y-ciencias-forenses-de-panama/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇵🇦 Panamá",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "af23c298-2c3",
+      "added_at": "2026-10-30T18:54:52Z"
+    },
     {
       "title": "Servicio de Fábrica de Software Especializada Ecosistema Microsoft CAF",
       "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/concurso-publico-internacional-para-el-servicio-de-fabrica-de-software-especializada-en-el-ecosistema-microsoft-de-caf/",
