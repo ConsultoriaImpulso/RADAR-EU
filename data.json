@@ -1,7 +1,35 @@
 {
-  "last_updated": "2026-11-19T18:45:10Z",
+  "last_updated": "2026-11-19T21:53:56Z",
   "last_reset": "2026-11-15T04:39:37Z",
   "tenders": [
+    {
+      "title": "SDI para desarrollar un diplomado en gestión financiera en Ecuador",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/solicitud-de-informacion-para-el-desarrollo-de-un-diplomado-en-gestion-financiera-subnacional-en-ecuador/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🇪🇨 Ecuador",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "7cca9063-b23",
+      "added_at": "2026-11-19T21:53:56Z"
+    },
+    {
+      "title": "Oportunidades de negocio para empresas portuguesas en América Latina",
+      "url": "https://www.caf.com/es/trabaja-con-nosotros/convocatorias/identificacion-de-oportunidades-de-negocio-en-america-latina-y-el-caribe-para-el-sector-empresarial-portugues-fase-i-diagnostico-y-estudio-de-oportunidades-de-negocio/",
+      "platform": "Banco de Desarrollo de América Latina y el Caribe (CAF)",
+      "sub_platform": "Convocatorias abiertas",
+      "description": "🌎 Regional LATAM",
+      "date": null,
+      "deadline": null,
+      "budget": null,
+      "topic": "other",
+      "type": "opencall",
+      "id": "497f959c-a69",
+      "added_at": "2026-11-19T21:53:56Z"
+    },
     {
       "title": "Booster Info Session: Free Guidance for EU-Funded Research Results",
       "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/support/events/177bg",
